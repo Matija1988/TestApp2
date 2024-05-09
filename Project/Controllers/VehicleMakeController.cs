@@ -32,5 +32,15 @@ namespace ProjectService.Controllers
 
             return Ok(StatusCode(StatusCodes.Status201Created));
         }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update(VehicleMakeDTOInsert dto, int id)
+        {
+           await _vehicleMakeService.UpdateVehicleMake(dto, id);
+            
+            return Ok(StatusCode(StatusCodes.Status200OK)); 
+
+        }
     }
 }

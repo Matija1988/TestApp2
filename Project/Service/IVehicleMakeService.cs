@@ -8,6 +8,8 @@ namespace ProjectService.Service
 
         Task<ServiceResponse<VehicleMake>> CreateVehicleMake(VehicleMakeDTOInsert dto);
 
+        Task<ServiceResponse<VehicleMake>> UpdateVehicleMake(VehicleMakeDTOInsert dto, int id);
+
        
     }
 }

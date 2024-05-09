@@ -42,13 +42,42 @@ namespace ProjectService.Service
 
         }
 
-        private async Task<VehicleMake> MapDTOToModel(VehicleMakeDTOInsert dto, VehicleMake entity)
+        public async Task<ServiceResponse<VehicleMake>> UpdateVehicleMake(VehicleMakeDTOInsert dto, int id)
         {
-            entity.Name = dto.Name;
-            entity.Abrv = dto.Abrv;
+            var response = new ServiceResponse<VehicleMake>();
 
-            return entity;
+            var MakerFromDb = await _context.VehicleMakers.FindAsync(id);
+
+            if(MakerFromDb.Equals(null)) 
+            {
+                response.Success = false;
+                response.Message = "Entity with id " + id + " not found in database";
+            }
+            try
+            {
+                MakerFromDb.Name = dto.Name;
+                MakerFromDb.Abrv = dto.Abrv;
+
+                _context.Update(MakerFromDb);
+                _context.SaveChanges();
+                response.Success = true;
+                response.Message = "Entity updated";
+
+                return response;
+
+            } catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Update failed" + ex.Message;
+
+                return response;
+            }
+
         }
+
+        
+
+        
 
         public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetVehicleMakers()
         {
@@ -60,6 +89,15 @@ namespace ProjectService.Service
             response.Data = await ReturnMappedList(list);
 
            return response;
+        
+        }
+
+        private async Task<VehicleMake> MapDTOToModel(VehicleMakeDTOInsert dto, VehicleMake entity)
+        {
+            entity.Name = dto.Name;
+            entity.Abrv = dto.Abrv;
+
+            return entity;
         }
 
 
