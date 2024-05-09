@@ -1,4 +1,6 @@
 ﻿namespace ProjectService.Model
 {
-    public record VehicleMakeDTORead(int id, string name, string abrv);
+    public record VehicleMakeDTORead(int Id, string Name, string Abrv);
+
+    public record VehicleMakeDTOInsert(string Name, string Abrv);
 }

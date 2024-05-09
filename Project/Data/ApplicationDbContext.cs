@@ -22,7 +22,7 @@ namespace ProjectService.Data
                     Name = "Bayerische Motoren Werke AG",
                     Abrv = "BMW"
                 }
-                ) ;
+                );
         }
     }
 }

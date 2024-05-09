@@ -42,6 +42,14 @@ namespace ProjectService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("VehicleMakers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Abrv = "BMW",
+                            Name = "Bayerische Motoren Werke AG"
+                        });
                 });
 
             modelBuilder.Entity("ProjectService.Model.VehicleModel", b =>

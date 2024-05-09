@@ -5,7 +5,7 @@
 namespace ProjectService.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,6 +44,11 @@ namespace ProjectService.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "VehicleMakers",
+                columns: new[] { "Id", "Abrv", "Name" },
+                values: new object[] { 1, "BMW", "Bayerische Motoren Werke AG" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_VehicleModel_MakeId",

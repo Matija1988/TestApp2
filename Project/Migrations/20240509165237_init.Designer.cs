@@ -11,8 +11,8 @@ using ProjectService.Data;
 namespace ProjectService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240509122711_Init")]
-    partial class Init
+    [Migration("20240509165237_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,14 @@ namespace ProjectService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("VehicleMakers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Abrv = "BMW",
+                            Name = "Bayerische Motoren Werke AG"
+                        });
                 });
 
             modelBuilder.Entity("ProjectService.Model.VehicleModel", b =>
