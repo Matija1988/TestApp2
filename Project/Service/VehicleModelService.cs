@@ -29,9 +29,10 @@ namespace ProjectService.Service
         {
             var response = new ServiceResponse<List<VehicleModelDTORead>>();
 
-            var list = await _context.VehicleModels.ToListAsync();
+            var list = await _context.VehicleModels.Include(vm => vm.Make).ToListAsync();
 
             if(list is null)
+
             {
                 response.Success = false;
                 response.Message = "No data in database!!!";

@@ -5,7 +5,7 @@
 namespace ProjectService.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +25,7 @@ namespace ProjectService.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "VehicleModel",
+                name: "VehicleModels",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -36,9 +36,9 @@ namespace ProjectService.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VehicleModel", x => x.Id);
+                    table.PrimaryKey("PK_VehicleModels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VehicleModel_VehicleMakers_MakeId",
+                        name: "FK_VehicleModels_VehicleMakers_MakeId",
                         column: x => x.MakeId,
                         principalTable: "VehicleMakers",
                         principalColumn: "Id",
@@ -50,9 +50,14 @@ namespace ProjectService.Migrations
                 columns: new[] { "Id", "Abrv", "Name" },
                 values: new object[] { 1, "BMW", "Bayerische Motoren Werke AG" });
 
+            migrationBuilder.InsertData(
+                table: "VehicleModels",
+                columns: new[] { "Id", "Abrv", "MakeId", "Name" },
+                values: new object[] { 1, "M3", 1, "Motorsport 3" });
+
             migrationBuilder.CreateIndex(
-                name: "IX_VehicleModel_MakeId",
-                table: "VehicleModel",
+                name: "IX_VehicleModels_MakeId",
+                table: "VehicleModels",
                 column: "MakeId");
         }
 
@@ -60,7 +65,7 @@ namespace ProjectService.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "VehicleModel");
+                name: "VehicleModels");
 
             migrationBuilder.DropTable(
                 name: "VehicleMakers");
