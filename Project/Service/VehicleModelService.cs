@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using ProjectService.Data;
 using ProjectService.Mappers;
 using ProjectService.Model;
@@ -15,9 +16,40 @@ namespace ProjectService.Service
             _context = context; 
         }
 
-        public Task<ServiceResponse<VehicleModel>> CreateEntity(VehicleModelDTOInsert dto)
+        public async Task<ServiceResponse<VehicleModel>> CreateEntity(VehicleModelDTOInsert dto)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<VehicleModel>();
+
+            try
+            {
+                await _context.VehicleModels.AddAsync(await MapDTOToModel(dto, new VehicleModel()));
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "Entity added successfuly";
+
+                return response;
+            } 
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Task failed!!!";
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private async Task<VehicleModel> MapDTOToModel(VehicleModelDTOInsert dto, VehicleModel vehicleModel)
+        {
+            
+            var vehicleMakers = await _context.VehicleMakers.FindAsync(dto.MakeId) 
+                ?? throw new Exception("Entity with id " + dto.MakeId + " not found in database!!!");
+
+            vehicleModel.Name = dto.Name;
+            vehicleModel.Abrv = dto.Abrv;
+            vehicleModel.MakeId = dto.MakeId;
+
+            return vehicleModel;
+
         }
 
         public Task<ServiceResponse<VehicleModel>> DeleteEntity(int id)

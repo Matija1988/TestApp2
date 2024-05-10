@@ -32,5 +32,11 @@ namespace ProjectService.Model
 
         [Required]
         [StringLength(20, ErrorMessage ="Maximum allowed number of characters = 20")]
-        string Abrv);
+        string Abrv,
+        
+        int MakeId
+        
+        );
+
+
 }

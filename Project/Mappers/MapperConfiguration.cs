@@ -31,6 +31,20 @@ namespace ProjectService.Mappers
             return mapper;
         }
 
+        public async Task<Mapper> VehicleModelInsertFromDTO()
+        {
+            var mapper = await ReturnInsertModelFromDTO();
+            return mapper;
+        }
+
+        private async Task<Mapper> ReturnInsertModelFromDTO()
+        {
+            return new Mapper(
+                new AutoMapper.MapperConfiguration(c =>
+                c.CreateMap<VehicleModelDTOInsert, VehicleModel>()));
+  
+        }
+
         /// <summary>
         /// Enkapsulacija mapper konfiguracije koja VehicleModel
         /// model mapira na VehicleModelDTORead

@@ -28,5 +28,22 @@ namespace ProjectService.Controllers
 
             return NotFound(response.Message);
         }
+
+        [HttpPost] 
+        public async Task<IActionResult> Create(VehicleModelDTOInsert dto)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _vehicleModelService.CreateEntity(dto);
+
+            if(response.Success)
+            {
+                return Ok(StatusCode(StatusCodes.Status201Created, response.Message));
+            }
+            return BadRequest(response.Message);    
+
+        }
     }
 }
