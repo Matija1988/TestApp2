@@ -10,6 +10,8 @@ namespace ProjectService.Service
 
         Task<ServiceResponse<VehicleMake>> UpdateVehicleMake(VehicleMakeDTOInsert dto, int id);
 
+        Task<ServiceResponse<VehicleMake>> DeleteVehicleMake(int id);
+
        
     }
 }

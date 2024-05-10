@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 using Ninject.Infrastructure.Language;
 using ProjectService.Data;
 using ProjectService.Mappers;
 using ProjectService.Model;
-using System.Runtime.CompilerServices;
 
 namespace ProjectService.Service
 {
@@ -20,14 +18,23 @@ namespace ProjectService.Service
             _mapping = mapping;
         }
 
+        /// <summary>
+        /// Stvara novi unos u bazu podataka putem ulaznog DTO
+        /// Creates a new db entry wila input DTO
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+
         public async Task<ServiceResponse<VehicleMake>> CreateVehicleMake(VehicleMakeDTOInsert dto)
         {
             var response = new ServiceResponse<VehicleMake>();
             try
             {
-                _context.VehicleMakers.Add(await MapDTOToModel(dto, new VehicleMake()));
-                _context.SaveChanges();
+                await _context.VehicleMakers.AddAsync(await MapDTOToModel(dto, new VehicleMake()));
+                await _context.SaveChangesAsync();
 
+                response.Success = true;
                 response.Message = "Entity added successfuly";
 
                 return response;
@@ -35,12 +42,21 @@ namespace ProjectService.Service
             } 
             catch (Exception ex)
             {
+                response.Success = false;
                 response.Message = "Task failed!!!";
                 throw new Exception(ex.Message);
                 
             }
 
         }
+
+        /// <summary>
+        /// Uzima ulazni DTO i uneseni int koji predstavlja kljuc unosa kojeg zelimo promijeniti
+        /// Takes input DTO and int id that represent the key of the entry we wish to update
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         public async Task<ServiceResponse<VehicleMake>> UpdateVehicleMake(VehicleMakeDTOInsert dto, int id)
         {
@@ -59,7 +75,7 @@ namespace ProjectService.Service
                 MakerFromDb.Abrv = dto.Abrv;
 
                 _context.Update(MakerFromDb);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 response.Success = true;
                 response.Message = "Entity updated";
 
@@ -75,10 +91,39 @@ namespace ProjectService.Service
 
         }
 
-        
+        public async Task<ServiceResponse<VehicleMake>> DeleteVehicleMake(int id)
+        {
 
-        
+            var response = new ServiceResponse<VehicleMake>();
 
+            try
+            {
+
+                var EntityFromDB = await _context.VehicleMakers.FindAsync(id);
+
+                _context.Remove(EntityFromDB);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "Entity deleted!!!";
+
+                return response;
+
+            } catch (Exception ex) 
+            {
+                response.Success = false;
+                response.Message = "Task failed!!! " + ex.Message;
+                return response;
+            }
+        } 
+ 
+
+        /// <summary>
+        /// Salje listu DTO VehicleMake u HTTP GET rutu kontrolera
+        /// Sends DTO list to HTTP GET route
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetVehicleMakers()
         {
            var list =  _context.VehicleMakers.ToList() 
@@ -92,6 +137,14 @@ namespace ProjectService.Service
         
         }
 
+        /// <summary>
+        /// Stavlja podatke iz DTO u model na odgovarajuce atribute
+        /// Sets data from DTO in the model at appropriate attributes
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+
         private async Task<VehicleMake> MapDTOToModel(VehicleMakeDTOInsert dto, VehicleMake entity)
         {
             entity.Name = dto.Name;
@@ -100,7 +153,12 @@ namespace ProjectService.Service
             return entity;
         }
 
-
+        /// <summary>
+        /// Uzima listu modela, vraca listu DTO
+        /// Takes model list, returns DTO list
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         private async Task<List<VehicleMakeDTORead>> ReturnMappedList(List<VehicleMake> list)
         {
             var entityList = new List<VehicleMakeDTORead>();

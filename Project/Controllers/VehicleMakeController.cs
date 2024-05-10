@@ -42,5 +42,19 @@ namespace ProjectService.Controllers
             return Ok(StatusCode(StatusCodes.Status200OK)); 
 
         }
+
+        [HttpDelete]
+        [Route("DeleteVehicleMake/{id:int}")]
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("ID cannot be equal to or lower then 0");
+            }
+            await _vehicleMakeService.DeleteVehicleMake(id);
+
+            return Ok(StatusCode(StatusCodes.Status200OK));
+        }
     }
 }
