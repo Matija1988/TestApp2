@@ -25,6 +25,16 @@ namespace ProjectService.Data
                     Abrv = "BMW"
                 }
                 );
+
+            modelBuilder.Entity<VehicleModel>().HasData(
+            new VehicleModel
+            {
+                Id = 1,
+                Name = "Motorsport 3",
+                Abrv = "M3",
+                MakeId = 1 
+            }
+            ) ;
         }
     }
 }
