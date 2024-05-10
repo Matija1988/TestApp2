@@ -2,6 +2,14 @@
 
 namespace ProjectService.Model
 {
+    /// <summary>
+    /// Nepromjenjiv record tip kojim definiram DTO
+    /// Immutable records to define DTOs
+    /// Record - Class or Struct 
+    /// </summary>
+    /// <param name="Id"></param>
+    /// <param name="Name"></param>
+    /// <param name="Abrv"></param>
     public record VehicleMakeDTORead(int Id, string Name, string Abrv);
 
     public record VehicleMakeDTOInsert(

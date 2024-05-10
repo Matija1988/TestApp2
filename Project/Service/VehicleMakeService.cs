@@ -7,6 +7,10 @@ using ProjectService.Model;
 
 namespace ProjectService.Service
 {
+    /// <summary>
+    /// Implementacija IVehicleMakeService
+    /// Implementation of IVehicleMakeService
+    /// </summary>
     public class VehicleMakeService : IVehicleMakeService
     {
         private readonly IMapping _mapping;
@@ -91,6 +95,15 @@ namespace ProjectService.Service
             }
 
         }
+
+        /// <summary>
+        /// Uzima ulazni int koji predstavlja kljuc objekta u bazi podataka 
+        /// pronalazi ga i brise iz baze 
+        /// Takes input int that represents a objects primary key 
+        /// finds the object in DB and deletes it
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         public async Task<ServiceResponse<VehicleMake>> DeleteVehicleMake(int id)
         {

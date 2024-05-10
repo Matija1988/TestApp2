@@ -1,5 +1,6 @@
 ﻿using ProjectService.Data;
 using ProjectService.Mappers;
+using ProjectService.Model;
 
 namespace ProjectService.Service
 {
@@ -11,6 +12,26 @@ namespace ProjectService.Service
         {
             _mapping = mapping;
             _context = context; 
+        }
+
+        public Task<ServiceResponse<VehicleModel>> CreateVehicleModel(VehicleModelDTOInsert dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ServiceResponse<VehicleModel>> DeleteVehicleModel(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ServiceResponse<List<VehicleModelDTORead>>> GetVehicleModels()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ServiceResponse<VehicleModel>> UpdateVehicleModel(VehicleModelDTOInsert dto, int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

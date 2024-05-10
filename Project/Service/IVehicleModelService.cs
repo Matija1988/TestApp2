@@ -2,7 +2,7 @@
 
 namespace ProjectService.Service
 {
-    public interface IVehicleModel
+    public interface IVehicleModelService
     {
         Task<ServiceResponse<List<VehicleModelDTORead>>> GetVehicleModels();
 

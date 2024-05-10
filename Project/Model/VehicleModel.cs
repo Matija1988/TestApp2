@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectService.Model
 {
+    /// <summary>
+    /// POKO kojim definiram model
+    /// POCO to define the model
+    /// </summary>
     public class VehicleModel
     {
         [Key]

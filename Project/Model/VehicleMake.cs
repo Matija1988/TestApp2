@@ -2,6 +2,10 @@
 
 namespace ProjectService.Model
 {
+    /// <summary>
+    /// POCO kojim definiram model
+    /// POCO to define the model
+    /// </summary>
     public class VehicleMake
     {
         [Key]

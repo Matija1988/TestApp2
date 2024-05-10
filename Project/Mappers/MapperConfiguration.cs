@@ -4,6 +4,10 @@ using ProjectService.Model;
 
 namespace ProjectService.Mappers
 {
+    /// <summary>
+    /// Implementacija IMapping interfacea
+    /// Implementation of IMapping interface
+    /// </summary>
     public class MapperConfiguration : IMapping
     {
         
@@ -27,6 +31,14 @@ namespace ProjectService.Mappers
             return mapper;
         }
 
+        /// <summary>
+        /// Enkapsulacija mapper konfiguracije koja VehicleModel
+        /// model mapira na VehicleModelDTORead
+        /// Encapsulation for mapper configuration which 
+        /// maps VehicleModel model to DTO
+        /// </summary>
+        /// <returns></returns>
+
         private async Task<Mapper> ReturnModelReadToDTO()
         {
             var mappper = new Mapper(
@@ -35,6 +47,13 @@ namespace ProjectService.Mappers
 
             return mappper;
         }
+        /// <summary>
+        /// Enkapsulacija mapper konfiguracije koja VehicleMake
+        /// model mapira na VehicleMakeDTORead
+        /// Encapsulation for mapper configuration which 
+        /// maps VehicleMake model to DTO
+        /// </summary>
+        /// <returns></returns>
 
         private async Task<Mapper> ReturnReadToDTO()
         {   
@@ -44,7 +63,13 @@ namespace ProjectService.Mappers
             
             return mapper;
         }
-
+        /// <summary>
+        /// Enkapsulacija mapper konfigiracije kojom se ulazni
+        /// VehicleMakeDTOInsert mapira u model
+        /// Encapsulation of mapper config that takes the 
+        /// input DTO and maps it to model
+        /// </summary>
+        /// <returns></returns>
         private async Task<Mapper> ReturnInsertFromDTO()
         {
             var mapper = new Mapper(
