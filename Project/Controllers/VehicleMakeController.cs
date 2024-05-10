@@ -15,32 +15,50 @@ namespace ProjectService.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get() 
+        public async Task<IActionResult> Get()
         {
-          return  Ok(_vehicleMakeService.GetVehicleMakers()); 
+            var response = await _vehicleMakeService.GetVehicleMakers();
+
+            if(response.Success)
+            {
+                return Ok(response.Data);
+            }
+            return NotFound(response.Message);
         }
 
-        [HttpPost] 
-        public async Task<IActionResult> Create(VehicleMakeDTOInsert dto) 
+        [HttpPost]
+        public async Task<IActionResult> Create(VehicleMakeDTOInsert dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await _vehicleMakeService.CreateVehicleMake(dto);
+            var response = await _vehicleMakeService.CreateVehicleMake(dto);
 
-            return Ok(StatusCode(StatusCodes.Status201Created));
+            if(response.Success)
+            {
+                return Ok(StatusCode(StatusCodes.Status201Created, response.Message));
+            }
+            return BadRequest(response.Message);
+            
         }
 
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> Update(VehicleMakeDTOInsert dto, int id)
         {
-           await _vehicleMakeService.UpdateVehicleMake(dto, id);
+            if (!ModelState.IsValid || id <= 0) 
+            {
+                return BadRequest("Please check your input! " + ModelState);
+            }
+           var response =  await _vehicleMakeService.UpdateVehicleMake(dto, id);
             
-            return Ok(StatusCode(StatusCodes.Status200OK)); 
-
+            if(response.Success)
+            {
+                return Ok(StatusCode(StatusCodes.Status200OK, response.Message));
+            } 
+            return BadRequest(response.Message);
         }
 
         [HttpDelete]
@@ -52,9 +70,14 @@ namespace ProjectService.Controllers
             {
                 return BadRequest("ID cannot be equal to or lower then 0");
             }
-            await _vehicleMakeService.DeleteVehicleMake(id);
+           var response =  await _vehicleMakeService.DeleteVehicleMake(id);
 
-            return Ok(StatusCode(StatusCodes.Status200OK));
+            if(response.Success)
+            {
+                return Ok(StatusCode(StatusCodes.Status200OK));
+            }
+            return BadRequest(response.Message);
+
         }
     }
 }

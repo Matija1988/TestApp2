@@ -16,7 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(ADBC =>
         ADBC.UseSqlServer(builder.Configuration.GetConnectionString(name: "ApplicationContext")));
 
 builder.Services.AddScoped<IVehicleMakeService, VehicleMakeService>();
-builder.Services.AddScoped<IMapping, VehicleMakeMapper>();
+builder.Services.AddScoped<IMapping, MapperConfiguration>();
+builder.Services.AddScoped<IVehicleModelService, VehicleModelService>();
 
 var app = builder.Build();
 

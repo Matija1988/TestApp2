@@ -5,12 +5,14 @@ namespace ProjectService.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> optons) : base(optons) 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
         { 
         
         }
 
         public DbSet<VehicleMake> VehicleMakers { get; set; }
+
+        public DbSet<VehicleModel> VehicleModels { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

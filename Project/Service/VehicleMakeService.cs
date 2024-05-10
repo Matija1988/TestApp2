@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-
+using Microsoft.EntityFrameworkCore;
 using Ninject.Infrastructure.Language;
 using ProjectService.Data;
 using ProjectService.Mappers;
@@ -64,10 +64,11 @@ namespace ProjectService.Service
 
             var MakerFromDb = await _context.VehicleMakers.FindAsync(id);
 
-            if(MakerFromDb.Equals(null)) 
+            if(MakerFromDb is null) 
             {
                 response.Success = false;
-                response.Message = "Entity with id " + id + " not found in database";
+                response.Message = "Entity with id " + id + " not found in database!!!";
+                return response;
             }
             try
             {
@@ -81,10 +82,10 @@ namespace ProjectService.Service
 
                 return response;
 
-            } catch (Exception ex)
+            } catch
             {
                 response.Success = false;
-                response.Message = "Update failed" + ex.Message;
+                response.Message = "Update failed!!!";
 
                 return response;
             }
@@ -96,10 +97,14 @@ namespace ProjectService.Service
 
             var response = new ServiceResponse<VehicleMake>();
 
-            try
-            {
-
                 var EntityFromDB = await _context.VehicleMakers.FindAsync(id);
+
+                if(EntityFromDB is null)
+                {
+                    response.Success = false;
+                    response.Message = "No entity with id " + id + " found in database!!!";
+                    return response;
+                }
 
                 _context.Remove(EntityFromDB);
                 await _context.SaveChangesAsync();
@@ -109,14 +114,8 @@ namespace ProjectService.Service
 
                 return response;
 
-            } catch (Exception ex) 
-            {
-                response.Success = false;
-                response.Message = "Task failed!!! " + ex.Message;
-                return response;
-            }
-        } 
- 
+        }
+
 
         /// <summary>
         /// Salje listu DTO VehicleMake u HTTP GET rutu kontrolera
@@ -126,15 +125,21 @@ namespace ProjectService.Service
         /// <exception cref="Exception"></exception>
         public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetVehicleMakers()
         {
-           var list =  _context.VehicleMakers.ToList() 
-                ?? throw new Exception("No data in database!!!");
+            var response = new ServiceResponse<List<VehicleMakeDTORead>>();
 
-            ServiceResponse<List<VehicleMakeDTORead>> response = new ServiceResponse<List<VehicleMakeDTORead>>();
+            var list = await _context.VehicleMakers.ToListAsync();
+
+            if (list is null)
+            {
+                response.Success = false;
+                response.Message = "No data in database!!!";
+                return response;
+            }
 
             response.Data = await ReturnMappedList(list);
 
-           return response;
-        
+            return response;
+
         }
 
         /// <summary>
@@ -162,7 +167,7 @@ namespace ProjectService.Service
         private async Task<List<VehicleMakeDTORead>> ReturnMappedList(List<VehicleMake> list)
         {
             var entityList = new List<VehicleMakeDTORead>();
-            var _mapper = _mapping.MapperInitReadToDTO();
+            var _mapper = await _mapping.VehicleMakerMapReadToDTO();
 
             foreach (var item in list)
             {
