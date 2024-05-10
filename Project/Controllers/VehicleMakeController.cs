@@ -8,16 +8,16 @@ namespace ProjectService.Controllers
     [Route("[controller]")]
     public class VehicleMakeController : ControllerBase
     {
-        private readonly IVehicleMakeService _vehicleMakeService;
-        public VehicleMakeController(IVehicleMakeService vehicleMakeService)
+        private readonly IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert> _vehicleMakeService;
+        public VehicleMakeController(IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert> vehicleMakeService)
         {
             _vehicleMakeService = vehicleMakeService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-            var response = await _vehicleMakeService.GetVehicleMakers();
+            var response = await _vehicleMakeService.GetAll();
 
             if(response.Success)
             {
@@ -27,14 +27,14 @@ namespace ProjectService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(VehicleMakeDTOInsert dto)
+        public async Task<IActionResult> CreateEntity(VehicleMakeDTOInsert dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var response = await _vehicleMakeService.CreateVehicleMake(dto);
+            var response = await _vehicleMakeService.CreateEntity(dto);
 
             if(response.Success)
             {
@@ -46,13 +46,13 @@ namespace ProjectService.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update(VehicleMakeDTOInsert dto, int id)
+        public async Task<IActionResult> UpdateEntity(VehicleMakeDTOInsert dto, int id)
         {
             if (!ModelState.IsValid || id <= 0) 
             {
                 return BadRequest("Please check your input! " + ModelState);
             }
-           var response =  await _vehicleMakeService.UpdateVehicleMake(dto, id);
+           var response =  await _vehicleMakeService.UpdateEntity(dto, id);
             
             if(response.Success)
             {
@@ -64,13 +64,13 @@ namespace ProjectService.Controllers
         [HttpDelete]
         [Route("DeleteVehicleMake/{id:int}")]
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteEntity(int id)
         {
             if (id <= 0)
             {
                 return BadRequest("ID cannot be equal to or lower then 0");
             }
-           var response =  await _vehicleMakeService.DeleteVehicleMake(id);
+           var response =  await _vehicleMakeService.DeleteEntity(id);
 
             if(response.Success)
             {

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectService.Controllers;
 using ProjectService.Data;
 using ProjectService.Mappers;
+using ProjectService.Model;
 using ProjectService.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(ADBC => 
         ADBC.UseSqlServer(builder.Configuration.GetConnectionString(name: "ApplicationContext")));
 
-builder.Services.AddScoped<IVehicleMakeService, VehicleMakeService>();
 builder.Services.AddScoped<IMapping, MapperConfiguration>();
-builder.Services.AddScoped<IVehicleModelService, VehicleModelService>();
+builder.Services.AddScoped<IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert>, VehicleMakeService>();
 
 var app = builder.Build();
 

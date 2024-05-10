@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Ninject;
 using Ninject.Infrastructure.Language;
 using ProjectService.Data;
 using ProjectService.Mappers;
@@ -11,11 +12,11 @@ namespace ProjectService.Service
     /// Implementacija IVehicleMakeService
     /// Implementation of IVehicleMakeService
     /// </summary>
-    public class VehicleMakeService : IVehicleMakeService
+    public class VehicleMakeService : IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert>
     {
         private readonly IMapping _mapping;
         private readonly ApplicationDbContext _context;
-        
+
         public VehicleMakeService(ApplicationDbContext context,  IMapping mapping)
         {
             _context = context;
@@ -30,7 +31,7 @@ namespace ProjectService.Service
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
 
-        public async Task<ServiceResponse<VehicleMake>> CreateVehicleMake(VehicleMakeDTOInsert dto)
+        public async Task<ServiceResponse<VehicleMake>> CreateEntity(VehicleMakeDTOInsert dto)
         {
             var response = new ServiceResponse<VehicleMake>();
             try
@@ -62,7 +63,7 @@ namespace ProjectService.Service
         /// <param name="id"></param>
         /// <returns></returns>
 
-        public async Task<ServiceResponse<VehicleMake>> UpdateVehicleMake(VehicleMakeDTOInsert dto, int id)
+        public async Task<ServiceResponse<VehicleMake>> UpdateEntity(VehicleMakeDTOInsert dto, int id)
         {
             var response = new ServiceResponse<VehicleMake>();
 
@@ -105,7 +106,7 @@ namespace ProjectService.Service
         /// <param name="id"></param>
         /// <returns></returns>
 
-        public async Task<ServiceResponse<VehicleMake>> DeleteVehicleMake(int id)
+        public async Task<ServiceResponse<VehicleMake>> DeleteEntity(int id)
         {
 
             var response = new ServiceResponse<VehicleMake>();
@@ -136,7 +137,7 @@ namespace ProjectService.Service
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetVehicleMakers()
+        public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetAll()
         {
             var response = new ServiceResponse<List<VehicleMakeDTORead>>();
 
