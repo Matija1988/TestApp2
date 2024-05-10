@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(ADBC =>
 
 builder.Services.AddScoped<IMapping, MapperConfiguration>();
 builder.Services.AddScoped<IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert>, VehicleMakeService>();
+builder.Services.AddScoped<IVehicleService<VehicleModel, VehicleModelDTORead, VehicleModelDTOInsert>, VehicleModelService>();
 
 var app = builder.Build();
 

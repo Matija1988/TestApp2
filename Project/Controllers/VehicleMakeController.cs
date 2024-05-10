@@ -9,7 +9,8 @@ namespace ProjectService.Controllers
     public class VehicleMakeController : ControllerBase
     {
         private readonly IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert> _vehicleMakeService;
-        public VehicleMakeController(IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert> vehicleMakeService)
+        public VehicleMakeController(
+            IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert> vehicleMakeService)
         {
             _vehicleMakeService = vehicleMakeService;
         }

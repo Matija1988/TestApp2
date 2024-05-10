@@ -43,7 +43,14 @@ namespace ProjectService.Mappers
         {
             var mappper = new Mapper(
                 new AutoMapper.MapperConfiguration(c =>
-                c.CreateMap<VehicleModel, VehicleMakeDTORead>()));
+                c.CreateMap<VehicleModel, VehicleModelDTORead>()
+                .ConstructUsing(e => 
+                new VehicleModelDTORead(
+                    e.Id,
+                    e.Name,
+                    e.Abrv,
+                    e.Make.Abrv
+                    ))));
 
             return mappper;
         }

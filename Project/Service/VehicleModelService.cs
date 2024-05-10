@@ -1,10 +1,11 @@
-﻿using ProjectService.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectService.Data;
 using ProjectService.Mappers;
 using ProjectService.Model;
 
 namespace ProjectService.Service
 {
-    public class VehicleModelService : IVehicleService<VehicleModel, VehicleMakeDTORead, VehicleMakeDTOInsert>
+    public class VehicleModelService : IVehicleService<VehicleModel, VehicleModelDTORead, VehicleModelDTOInsert>
     {
         private readonly IMapping _mapping;
         private readonly ApplicationDbContext _context;
@@ -14,7 +15,7 @@ namespace ProjectService.Service
             _context = context; 
         }
 
-        public Task<ServiceResponse<VehicleModel>> CreateEntity(VehicleMakeDTOInsert dto)
+        public Task<ServiceResponse<VehicleModel>> CreateEntity(VehicleModelDTOInsert dto)
         {
             throw new NotImplementedException();
         }
@@ -24,15 +25,42 @@ namespace ProjectService.Service
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<List<VehicleMakeDTORead>>> GetAll()
+        public async Task<ServiceResponse<List<VehicleModelDTORead>>> GetAll()
         {
-            var response = new ServiceResponse<List<VehicleMakeDTORead>>();
-            return null;
+            var response = new ServiceResponse<List<VehicleModelDTORead>>();
+
+            var list = await _context.VehicleModels.ToListAsync();
+
+            if(list is null)
+            {
+                response.Success = false;
+                response.Message = "No data in database!!!";
+                return response;
+            }
+
+            response.Data = await ReturnMappedList(list);
+            
+            return response;
         }
 
-        public Task<ServiceResponse<VehicleModel>> UpdateEntity(VehicleMakeDTOInsert dto, int id)
+        
+        public Task<ServiceResponse<VehicleModel>> UpdateEntity(VehicleModelDTOInsert dto, int id)
         {
             throw new NotImplementedException();
         }
+
+        private async Task<List<VehicleModelDTORead>?> ReturnMappedList(List<VehicleModel> list)
+        {
+            var entityList = new List<VehicleModelDTORead>();
+            var _mapper = await _mapping.VehicleModelMapReadToDTO();
+
+            foreach (var entity in list)
+            {
+                entityList.Add(_mapper.Map<VehicleModelDTORead>(entity));
+            }
+
+            return entityList;
+        }
+
     }
 }
