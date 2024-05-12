@@ -27,6 +27,19 @@ namespace ProjectService.Controllers
             return NotFound(response.Message);
         }
 
+        [HttpGet]
+        [Route("FindMaker/{id:int}")]
+        public async Task<IActionResult> GetSingle(int id)
+        {
+            var response = await _vehicleMakeService.GetSingleEntity(id);
+
+            if(response.Success)
+            { 
+                return Ok(response.Data); 
+            }
+            return NotFound(response.Message);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateEntity(VehicleMakeDTOInsert dto)
         {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ninject;
 using Ninject.Infrastructure.Language;
@@ -109,6 +110,34 @@ namespace ProjectService.Service
 
             return response;
 
+        }
+
+        public async Task<ServiceResponse<VehicleMakeDTORead>> GetSingleEntity(int id)
+        {
+            var response = new ServiceResponse<VehicleMakeDTORead>();
+           
+            var maker = await _context.VehicleMakers.FindAsync(id);
+
+            if(id <= 0 || maker is null)
+            {
+                response.Success = false;
+                response.Message = "Vehicle maker with id " + id + " not found in database!!! " +
+                                    "Id cannot be equal to or less than 0!!!";
+                return response;
+            }
+
+            response.Success = true;
+            response.Data  = await ReturnSingleDTORead(maker);
+
+            return response;
+
+        }
+
+        private async Task<VehicleMakeDTORead> ReturnSingleDTORead(VehicleMake entity)
+        {
+            var _mapper = await _mapping.VehicleMakerMapReadToDTO();
+
+            return _mapper.Map<VehicleMakeDTORead>(entity);
         }
 
         /// <summary>
@@ -222,5 +251,6 @@ namespace ProjectService.Service
             }
         }
 
+       
     }
 }

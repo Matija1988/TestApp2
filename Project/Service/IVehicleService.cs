@@ -13,11 +13,14 @@ namespace ProjectService.Service
     {
         Task<ServiceResponse<List<TDO>>> GetAll();
 
+        Task<ServiceResponse<TDO>> GetSingleEntity(int id);
+
         Task<ServiceResponse<T>> CreateEntity(TDI dto);
 
         Task<ServiceResponse<T>> UpdateEntity(TDI dto, int id);
 
         Task<ServiceResponse<T>> DeleteEntity(int id);
+
 
        
     }
