@@ -45,5 +45,28 @@ namespace ProjectService.Controllers
             return BadRequest(response.Message);    
 
         }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update(VehicleModelDTOInsert dto, int id)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var response = await _vehicleModelService.UpdateEntity(dto, id);
+
+            if(response.Success)
+            {
+                return Ok(StatusCode(StatusCodes.Status200OK, response.Message));
+            }
+
+            return BadRequest(response.Message);
+        }
+
+        [HttpDelete]
+        [Route("DeleteVehicleModel/{id:int}")]
+
     }
 }

@@ -38,6 +38,40 @@ namespace ProjectService.Service
             }
         }
 
+        public async Task<ServiceResponse<VehicleModel>> UpdateEntity(VehicleModelDTOInsert dto, int id)
+        {
+            var response = new ServiceResponse<VehicleModel>(); 
+            var entityFromDB = await _context.VehicleModels.FindAsync(id);
+            var makerFromDB = await _context.VehicleMakers.FindAsync(dto.MakeId);
+
+            if(entityFromDB is null || makerFromDB is null)
+            {
+                response.Success = false;
+                response.Message = "No entity with id " + id + " found in database!!!";
+                return response;
+            }
+
+            entityFromDB.Name = dto.Name;
+            entityFromDB.Abrv = dto.Abrv;
+            entityFromDB.Make = makerFromDB;
+
+            _context.Update(entityFromDB);
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Message = "Entity updated";
+
+            return response;
+        }
+
+
+        public Task<ServiceResponse<VehicleModel>> DeleteEntity(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
         private async Task<VehicleModel> MapDTOToModel(VehicleModelDTOInsert dto, VehicleModel vehicleModel)
         {
             
@@ -50,11 +84,6 @@ namespace ProjectService.Service
 
             return vehicleModel;
 
-        }
-
-        public Task<ServiceResponse<VehicleModel>> DeleteEntity(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ServiceResponse<List<VehicleModelDTORead>>> GetAll()
@@ -77,12 +106,7 @@ namespace ProjectService.Service
         }
 
         
-        public Task<ServiceResponse<VehicleModel>> UpdateEntity(VehicleModelDTOInsert dto, int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<List<VehicleModelDTORead>?> ReturnMappedList(List<VehicleModel> list)
+        private async Task<List<VehicleModelDTORead>> ReturnMappedList(List<VehicleModel> list)
         {
             var entityList = new List<VehicleModelDTORead>();
             var _mapper = await _mapping.VehicleModelMapReadToDTO();
