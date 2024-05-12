@@ -70,7 +70,27 @@ namespace ProjectService.Controllers
 
         public async Task<IActionResult> Delete (int id)
         {
-            return null; 
+            var response =  await _vehicleModelService.DeleteEntity(id);
+            
+            if(response.Success)
+            {
+                return StatusCode(StatusCodes.Status200OK, response.Message);
+            }
+            return BadRequest(response.Message);
+        }
+
+        [HttpGet]
+        [Route("FindModel/{id:int}")]
+
+        public async Task<IActionResult> GetSingle(int id)
+        {
+            var response = await _vehicleModelService.GetSingleEntity(id);
+
+            if(response.Success)
+            {
+                return StatusCode(StatusCodes.Status200OK, response.Data);
+            }
+            return BadRequest(response.Message);    
         }
     }
 }

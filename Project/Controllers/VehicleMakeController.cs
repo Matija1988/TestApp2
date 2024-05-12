@@ -28,7 +28,7 @@ namespace ProjectService.Controllers
         }
 
         [HttpGet]
-        [Route("FindMaker/{id:int}")]
+        [Route("FindMakerByID/{id:int}")]
         public async Task<IActionResult> GetSingle(int id)
         {
             var response = await _vehicleMakeService.GetSingleEntity(id);

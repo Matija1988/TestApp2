@@ -28,9 +28,27 @@ namespace ProjectService.Service
 
        
 
-        public Task<ServiceResponse<VehicleModel>> DeleteEntity(int id)
+        public async Task<ServiceResponse<VehicleModel>> DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<VehicleModel>();
+
+            var EntityFromDB = await _context.VehicleModels.FindAsync(id);
+
+            if (EntityFromDB is null || id <= 0)
+            {
+                response.Success = false;
+                response.Message = "No vehicle model with id " + id + " found in database!!! " +
+                    "Id cannot be equal to or less than 0!!!";
+                return response;
+            }
+
+            _context.Remove(EntityFromDB);
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Message = "Entity deleted!!!";
+
+            return response;
         }
 
         public async Task<ServiceResponse<List<VehicleModelDTORead>>> GetAll()
@@ -56,12 +74,13 @@ namespace ProjectService.Service
         {
             var response = new ServiceResponse<VehicleModelDTORead>();
 
-            var model = await _context.VehicleModels.FindAsync(id);
+            var model = await _context.VehicleModels.Include(vm => vm.Make).FirstOrDefaultAsync(v => v.Id == id);
 
-            if (model is null)
+            if (model is null || id <= 0)
             {
                 response.Success = false;
-                response.Message = "Vehicle maker with id " + id + " not found in database!!!";
+                response.Message = "Vehicle model with id " + id + " not found in database!!! " +
+                    "Id cannot be equal to or less than 0!!!";
                 return response;
             }
 
@@ -73,7 +92,7 @@ namespace ProjectService.Service
 
         private async Task<VehicleModelDTORead> ReturnSingleDTORead(VehicleModel entity)
         {
-            var _mapper = await _mapping.VehicleMakerMapReadToDTO();
+            var _mapper = await _mapping.VehicleModelMapReadToDTO();
 
             return _mapper.Map<VehicleModelDTORead>(entity);
         }
@@ -82,7 +101,7 @@ namespace ProjectService.Service
         {
 
             var vehicleMakers = await _context.VehicleMakers.FindAsync(dto.MakeId)
-                ?? throw new Exception("Entity with id " + dto.MakeId + " not found in database!!!");
+                ?? throw new Exception("Vehicle maker with id " + dto.MakeId + " not found in database!!!");
 
             vehicleModel.Name = dto.Name;
             vehicleModel.Abrv = dto.Abrv;
