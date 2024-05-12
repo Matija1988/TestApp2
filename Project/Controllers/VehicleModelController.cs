@@ -68,5 +68,9 @@ namespace ProjectService.Controllers
         [HttpDelete]
         [Route("DeleteVehicleModel/{id:int}")]
 
+        public async Task<IActionResult> Delete (int id)
+        {
+            return null; 
+        }
     }
 }

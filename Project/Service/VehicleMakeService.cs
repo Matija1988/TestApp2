@@ -33,25 +33,7 @@ namespace ProjectService.Service
 
         public async Task<ServiceResponse<VehicleMake>> CreateEntity(VehicleMakeDTOInsert dto)
         {
-            var response = new ServiceResponse<VehicleMake>();
-            try
-            {
-                await _context.VehicleMakers.AddAsync(await MapDTOToModel(dto, new VehicleMake()));
-                await _context.SaveChangesAsync();
-
-                response.Success = true;
-                response.Message = "Entity added successfuly";
-
-                return response;
- 
-            } 
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = "Task failed!!!";
-                throw new Exception(ex.Message);
-                
-            }
+            return await ReturnCreatedEntity(dto);
 
         }
 
@@ -65,37 +47,10 @@ namespace ProjectService.Service
 
         public async Task<ServiceResponse<VehicleMake>> UpdateEntity(VehicleMakeDTOInsert dto, int id)
         {
-            var response = new ServiceResponse<VehicleMake>();
-
-            var MakerFromDb = await _context.VehicleMakers.FindAsync(id);
-
-            if(MakerFromDb is null) 
-            {
-                response.Success = false;
-                response.Message = "Entity with id " + id + " not found in database!!!";
-                return response;
-            }
-            try
-            {
-                MakerFromDb.Name = dto.Name;
-                MakerFromDb.Abrv = dto.Abrv;
-
-                _context.Update(MakerFromDb);
-                await _context.SaveChangesAsync();
-                response.Success = true;
-                response.Message = "Entity updated";
-
-                return response;
-
-            } catch
-            {
-                response.Success = false;
-                response.Message = "Update failed!!!";
-
-                return response;
-            }
-
+            return await ReturnUpdatedEntity(dto,id);
         }
+
+        
 
         /// <summary>
         /// Uzima ulazni int koji predstavlja kljuc objekta u bazi podataka 
@@ -190,6 +145,81 @@ namespace ProjectService.Service
 
             return entityList;  
 
+        }
+
+        /// <summary>
+        /// Uzima DTO i stvara novi unos u bazi podataka
+        /// Takes inpit DTO and creates new entry in DB
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+
+        private async Task<ServiceResponse<VehicleMake>> ReturnCreatedEntity(VehicleMakeDTOInsert dto)
+        {
+            var response = new ServiceResponse<VehicleMake>();
+            try
+            {
+                await _context.VehicleMakers.AddAsync(await MapDTOToModel(dto, new VehicleMake()));
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "Vehicle model added successfuly";
+
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Task failed!!!";
+                throw new Exception(ex.Message);
+
+            }
+        }
+
+        /// <summary>
+        /// Uzima ulazni DTO i int koji predstavlja primarni kljuc entiteta u bazi podataka 
+        /// mijenja ih i vraca u javnu metodu
+        /// Takes input DTO and int which represents a primary key of an entity in DB 
+        /// changes is and returns it to the public method
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        private async Task<ServiceResponse<VehicleMake>> ReturnUpdatedEntity(VehicleMakeDTOInsert dto, int id)
+        {
+            var response = new ServiceResponse<VehicleMake>();
+
+            var MakerFromDb = await _context.VehicleMakers.FindAsync(id);
+
+            if (MakerFromDb is null)
+            {
+                response.Success = false;
+                response.Message = "Vehicle maker with id " + id + " not found in database!!!";
+                return response;
+            }
+            try
+            {
+                MakerFromDb.Name = dto.Name;
+                MakerFromDb.Abrv = dto.Abrv;
+
+                _context.Update(MakerFromDb);
+                await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "Entity updated";
+
+                return response;
+
+            }
+            catch
+            {
+                response.Success = false;
+                response.Message = "Update failed!!!";
+
+                return response;
+            }
         }
 
     }
