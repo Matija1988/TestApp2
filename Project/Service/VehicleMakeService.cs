@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ninject;
 using Ninject.Infrastructure.Language;
@@ -132,6 +133,47 @@ namespace ProjectService.Service
             return response;
 
         }
+        public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetPagination(int page, string condition = "")
+        {
+            var response = new ServiceResponse<List<VehicleMakeDTORead>>();
+            var byPage = 10;
+            condition = condition.ToLower();
+
+            response.Data = await ReturnPaginatedDTOList(byPage, page, condition); 
+
+            if(response.Data is null)
+            {
+                response.Success = false;
+                response.Message = "No vehicle makers under search condition found in database";
+                return response;
+            }
+
+            response.Success = true;
+
+            return response;
+
+        }
+
+        private async Task<List<VehicleMakeDTORead>> ReturnPaginatedDTOList(int byPage, int page, string condition)
+        {
+            var _mapper = await _mapping.VehicleMakerMapReadToDTO();
+
+            try
+            {
+                var data = _context.VehicleMakers.Where(a => EF.Functions.Like(a.Name.ToLower(), "%" + condition + "%")
+                || EF.Functions.Like(a.Abrv.ToLower(), "%" + condition + "%"))
+                    .Skip((byPage * page) - byPage)
+                    .Take(byPage)
+                    .OrderBy(a => a.Name)
+                    .ToList();
+
+                return _mapper.Map<List<VehicleMakeDTORead>>(data);
+            }
+            catch (Exception ex)
+            {
+               throw new Exception(ex.Message);
+            }
+        }
 
         private async Task<VehicleMakeDTORead> ReturnSingleDTORead(VehicleMake entity)
         {
@@ -251,6 +293,6 @@ namespace ProjectService.Service
             }
         }
 
-       
+        
     }
 }

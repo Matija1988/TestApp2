@@ -21,6 +21,9 @@ namespace ProjectService.Service
 
         Task<ServiceResponse<T>> DeleteEntity(int id);
 
+        Task<ServiceResponse<List<TDO>>> GetPagination(int page, string condition ="");
+
+
 
        
     }

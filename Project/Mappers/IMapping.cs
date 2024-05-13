@@ -14,6 +14,7 @@ namespace ProjectService.Mappers
 
         Task<Mapper> VehicleModelMapReadToDTO();
 
+        Task<Mapper> VehicleModelInsertFromDTO();
 
     }
 }

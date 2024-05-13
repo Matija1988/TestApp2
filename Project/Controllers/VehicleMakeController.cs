@@ -93,5 +93,20 @@ namespace ProjectService.Controllers
             return BadRequest(response.Message);
 
         }
+
+        [HttpGet]
+        [Route("Paginate/{page:int}")]
+
+        public async Task<IActionResult> GetPagination(int page, string condition)
+        {
+            var response = await _vehicleMakeService.GetPagination(page, condition);
+
+            if(response.Success)
+            {
+                return StatusCode(StatusCodes.Status200OK, response.Data);
+            }
+            return BadRequest(response.Message);
+        }
+
     }
 }

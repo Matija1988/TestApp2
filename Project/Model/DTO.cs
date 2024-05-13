@@ -21,7 +21,9 @@ namespace ProjectService.Model
         [Required]
         [StringLength(20, ErrorMessage ="Maximum allowed number of characters = 20")]
         string Abrv);
-    
+        
+    public record VehicleMakeDTOReadWithoutID(string Name, string Abrv);
+
     public record VehicleModelDTORead(int Id, string Name, string Abrv, string Maker);
 
     public record VehicleModelDTOInsert(
@@ -38,5 +40,6 @@ namespace ProjectService.Model
         
         );
 
+    public record VehicleModelDTOReadWithoutID (string Name, string Abrv, string Maker);
 
 }

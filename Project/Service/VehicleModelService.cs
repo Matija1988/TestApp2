@@ -90,6 +90,11 @@ namespace ProjectService.Service
             return response;
         }
 
+        public Task<ServiceResponse<List<VehicleModelDTORead>>> GetPagination(int page, string condition = "")
+        {
+            return null;
+        }
+
         private async Task<VehicleModelDTORead> ReturnSingleDTORead(VehicleModel entity)
         {
             var _mapper = await _mapping.VehicleModelMapReadToDTO();
@@ -170,6 +175,6 @@ namespace ProjectService.Service
             return entityList;
         }
 
-        
+       
     }
 }

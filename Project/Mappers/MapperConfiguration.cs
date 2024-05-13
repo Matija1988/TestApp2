@@ -25,6 +25,12 @@ namespace ProjectService.Mappers
             return mapper;  
         }
 
+        public async Task<Mapper> VehicleMakerDataOfUpdatedEntity()
+        {
+            var mapper = await ReturnUpdatedMakerData();
+            return mapper;
+        }
+
         public async Task<Mapper> VehicleModelMapReadToDTO()
         {
             var mapper = await ReturnModelReadToDTO();
@@ -37,6 +43,24 @@ namespace ProjectService.Mappers
             return mapper;
         }
 
+        public async Task<Mapper> VehicleModelDataOfUpdatedEntity()
+        {
+            var mapper = await ReturnUpdatedModelData();
+            return mapper;
+        }
+
+        private async Task<Mapper> ReturnUpdatedModelData()
+        {
+            return new Mapper(
+                new AutoMapper.MapperConfiguration(c =>
+                c.CreateMap<VehicleModel, VehicleModelDTOReadWithoutID>().ConstructUsing
+                (e => new VehicleModelDTOReadWithoutID(
+                    e.Name,
+                    e.Abrv,
+                    e.Make.Abrv
+                    ))));
+        }
+
         private async Task<Mapper> ReturnInsertModelFromDTO()
         {
             return new Mapper(
@@ -44,6 +68,13 @@ namespace ProjectService.Mappers
                 c.CreateMap<VehicleModelDTOInsert, VehicleModel>()));
   
         }
+        private async Task<Mapper> ReturnUpdatedMakerData()
+        {
+            return new Mapper(
+                new AutoMapper.MapperConfiguration(c =>
+                c.CreateMap<VehicleMake, VehicleMakeDTOReadWithoutID>()));
+        }
+
 
         /// <summary>
         /// Enkapsulacija mapper konfiguracije koja VehicleModel
