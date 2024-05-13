@@ -90,9 +90,48 @@ namespace ProjectService.Service
             return response;
         }
 
-        public Task<ServiceResponse<List<VehicleModelDTORead>>> GetPagination(int page, string condition = "")
+        public async Task<ServiceResponse<List<VehicleModelDTORead>>> GetPagination(int page, string condition = "")
         {
-            return null;
+            var response = new ServiceResponse<List<VehicleModelDTORead>>();
+
+            var byPage = 10;
+
+            condition = condition.ToLower();
+
+            response.Data = await ReturnPaginatedDTOList(byPage, page, condition);  
+
+            if (response.Data is null)
+            {
+                response.Success = false;
+                response.Message = "No vehicle models under search condition found in database!!!";
+                return response;
+
+            }
+
+            response.Success = true;
+            return response;
+
+        }
+
+        private async Task<List<VehicleModelDTORead>?> ReturnPaginatedDTOList(int byPage, int page, string condition)
+        {
+            var _mapper = await _mapping.VehicleModelMapReadToDTO();
+            try
+            {
+                var data = _context.VehicleModels.Include(vm => vm.Make)
+                    .Where(e => EF.Functions.Like(e.Name.ToLower(), "%" + condition + "%")
+                    || EF.Functions.Like(e.Abrv.ToLower(), "%" + condition + "%"))
+                    .Skip((byPage * page) - byPage)
+                    .Take(byPage)
+                    .OrderBy(a => a.Make.Abrv)
+                    .ToList();
+
+                return _mapper.Map<List<VehicleModelDTORead>>(data);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         private async Task<VehicleModelDTORead> ReturnSingleDTORead(VehicleModel entity)

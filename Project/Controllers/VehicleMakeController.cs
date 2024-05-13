@@ -6,7 +6,7 @@ namespace ProjectService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class VehicleMakeController : ControllerBase
+    public class VehicleMakeController : ControllerBase, IController<VehicleMakeDTOInsert>
     {
         private readonly IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert> _vehicleMakeService;
         public VehicleMakeController(
