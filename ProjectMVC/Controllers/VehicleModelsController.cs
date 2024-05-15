@@ -106,6 +106,35 @@ namespace ProjectMVC.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            HttpResponseMessage response = _httpClient.GetAsync(baseUrl + "/FindModel/" + id).Result;
+
+            if(!response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var data = response.Content.ReadAsStringAsync().Result;
+            var entityFromDb = JsonConvert.DeserializeObject<VehicleModelDTOReadWithoutID>(data);
+
+            return View(entityFromDb);
+
+        }
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirm(int id)
+        {
+            HttpResponseMessage response = _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleModel/" + id).Result;
+
+            if(!response.IsSuccessStatusCode) 
+            { 
+            return View();
+            }
+            return RedirectToAction("Index");
+
+        }
+
     }
 }
 
