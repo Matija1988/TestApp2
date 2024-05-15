@@ -26,14 +26,6 @@ namespace ProjectMVC.Controllers
             return View();
         }
 
-
-        //[HttpGet]
-
-        //public IActionResult Edit()
-        //{
-        //    return View();
-        //}
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -107,7 +99,7 @@ namespace ProjectMVC.Controllers
 
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json"); 
 
-            HttpResponseMessage response = _httpClient.PutAsync(baseUrl, content).Result; 
+            HttpResponseMessage response = _httpClient.PutAsync(baseUrl + "/" + id, content).Result; 
             
             if(response.IsSuccessStatusCode)
             {
@@ -118,6 +110,35 @@ namespace ProjectMVC.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            HttpResponseMessage response = _httpClient.GetAsync(baseUrl + "/FindMakerByID/" + id).Result;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            var data = response.Content.ReadAsStringAsync().Result;
+            var entityFromDB = JsonConvert.DeserializeObject<VehicleMakeDTOReadWithoutID>(data);
+
+            return View(entityFromDB);
+        }
+
+        [HttpPost, ActionName("Delete")]
+
+        public IActionResult DeleteConfirm(int id)
+        {
+            HttpResponseMessage response = _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleMake/" + id).Result;
+
+            if(!response.IsSuccessStatusCode)
+            {
+                return View();
+            }
+
+            return RedirectToAction("Index");
+
+        }
 
     }
 }
