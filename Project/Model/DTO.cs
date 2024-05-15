@@ -40,6 +40,6 @@ namespace ProjectService.Model
         
         );
 
-    public record VehicleModelDTOReadWithoutID (string Name, string Abrv, string Maker);
+    public record VehicleModelDTOReadWithoutID (string Name, string Abrv, int Maker);
 
 }

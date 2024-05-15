@@ -19,8 +19,7 @@ namespace ProjectService.Controllers
             <VehicleModel,
                 VehicleModelDTORead,
                 VehicleModelDTOInsert,
-                VehicleModelDTOReadWithoutID>
-            vehicleModelService)
+                VehicleModelDTOReadWithoutID> vehicleModelService)
         {
             _vehicleModelService = vehicleModelService;
         }

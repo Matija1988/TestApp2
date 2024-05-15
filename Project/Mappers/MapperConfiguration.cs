@@ -57,7 +57,7 @@ namespace ProjectService.Mappers
                 (e => new VehicleModelDTOReadWithoutID(
                     e.Name,
                     e.Abrv,
-                    e.Make.Abrv
+                    e.Make.Id
                     ))));
         }
 
