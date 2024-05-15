@@ -16,5 +16,9 @@ namespace ProjectService.Mappers
 
         Task<Mapper> VehicleModelInsertFromDTO();
 
+        Task<Mapper> VehicleMakerDataOfUpdatedEntity();
+
+        Task<Mapper> VehicleModelDataOfUpdatedEntity();
+
     }
 }

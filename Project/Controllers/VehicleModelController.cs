@@ -8,10 +8,19 @@ namespace ProjectService.Controllers
     [Route("[controller]")]
     public class VehicleModelController : ControllerBase, IController<VehicleModelDTOInsert>
     {
-        private readonly IVehicleService<VehicleModel, VehicleModelDTORead, VehicleModelDTOInsert> _vehicleModelService;
+        private readonly IVehicleService
+            <VehicleModel,
+            VehicleModelDTORead,
+            VehicleModelDTOInsert,
+            VehicleModelDTOReadWithoutID> _vehicleModelService;
 
         public VehicleModelController(
-            IVehicleService<VehicleModel, VehicleModelDTORead, VehicleModelDTOInsert> vehicleModelService)
+            IVehicleService
+            <VehicleModel,
+                VehicleModelDTORead,
+                VehicleModelDTOInsert,
+                VehicleModelDTOReadWithoutID>
+            vehicleModelService)
         {
             _vehicleModelService = vehicleModelService;
         }

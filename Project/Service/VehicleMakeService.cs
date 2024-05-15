@@ -14,7 +14,8 @@ namespace ProjectService.Service
     /// Implementacija IVehicleMakeService
     /// Implementation of IVehicleMakeService
     /// </summary>
-    public class VehicleMakeService : IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert>
+    public class VehicleMakeService 
+        : IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert, VehicleMakeDTOReadWithoutID>
     {
         private readonly IMapping _mapping;
         private readonly ApplicationDbContext _context;
@@ -113,9 +114,9 @@ namespace ProjectService.Service
 
         }
 
-        public async Task<ServiceResponse<VehicleMakeDTORead>> GetSingleEntity(int id)
+        public async Task<ServiceResponse<VehicleMakeDTOReadWithoutID>> GetSingleEntity(int id)
         {
-            var response = new ServiceResponse<VehicleMakeDTORead>();
+            var response = new ServiceResponse<VehicleMakeDTOReadWithoutID>();
            
             var maker = await _context.VehicleMakers.FindAsync(id);
 
@@ -175,11 +176,11 @@ namespace ProjectService.Service
             }
         }
 
-        private async Task<VehicleMakeDTORead> ReturnSingleDTORead(VehicleMake entity)
+        private async Task<VehicleMakeDTOReadWithoutID> ReturnSingleDTORead(VehicleMake entity)
         {
-            var _mapper = await _mapping.VehicleMakerMapReadToDTO();
+            var _mapper = await _mapping.VehicleMakerDataOfUpdatedEntity();
 
-            return _mapper.Map<VehicleMakeDTORead>(entity);
+            return _mapper.Map<VehicleMakeDTOReadWithoutID>(entity);
         }
 
         /// <summary>

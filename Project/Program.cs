@@ -18,8 +18,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(ADBC =>
         ADBC.UseSqlServer(builder.Configuration.GetConnectionString(name: "ApplicationContext")));
 
 builder.Services.AddScoped<IMapping, MapperConfiguration>();
-builder.Services.AddScoped<IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert>, VehicleMakeService>();
-builder.Services.AddScoped<IVehicleService<VehicleModel, VehicleModelDTORead, VehicleModelDTOInsert>, VehicleModelService>();
+
+builder.Services.AddScoped
+    <IVehicleService<VehicleMake,
+                     VehicleMakeDTORead,
+                     VehicleMakeDTOInsert,
+                     VehicleMakeDTOReadWithoutID>,
+                     VehicleMakeService>();
+
+builder.Services.AddScoped
+    <IVehicleService<VehicleModel,
+                     VehicleModelDTORead,
+                     VehicleModelDTOInsert,
+                     VehicleModelDTOReadWithoutID>,
+                     VehicleModelService>();
 
 var app = builder.Build();
 

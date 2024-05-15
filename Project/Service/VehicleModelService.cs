@@ -6,7 +6,8 @@ using ProjectService.Model;
 
 namespace ProjectService.Service
 {
-    public class VehicleModelService : IVehicleService<VehicleModel, VehicleModelDTORead, VehicleModelDTOInsert>
+    public class VehicleModelService 
+        : IVehicleService<VehicleModel, VehicleModelDTORead, VehicleModelDTOInsert, VehicleModelDTOReadWithoutID>
     {
         private readonly IMapping _mapping;
         private readonly ApplicationDbContext _context;
@@ -70,9 +71,9 @@ namespace ProjectService.Service
             return response;
         }
 
-        public async Task<ServiceResponse<VehicleModelDTORead>> GetSingleEntity(int id)
+        public async Task<ServiceResponse<VehicleModelDTOReadWithoutID>> GetSingleEntity(int id)
         {
-            var response = new ServiceResponse<VehicleModelDTORead>();
+            var response = new ServiceResponse<VehicleModelDTOReadWithoutID>();
 
             var model = await _context.VehicleModels.Include(vm => vm.Make).FirstOrDefaultAsync(v => v.Id == id);
 
@@ -134,11 +135,11 @@ namespace ProjectService.Service
             }
         }
 
-        private async Task<VehicleModelDTORead> ReturnSingleDTORead(VehicleModel entity)
+        private async Task<VehicleModelDTOReadWithoutID> ReturnSingleDTORead(VehicleModel entity)
         {
-            var _mapper = await _mapping.VehicleModelMapReadToDTO();
+            var _mapper = await _mapping.VehicleModelDataOfUpdatedEntity();
 
-            return _mapper.Map<VehicleModelDTORead>(entity);
+            return _mapper.Map<VehicleModelDTOReadWithoutID>(entity);
         }
 
         private async Task<VehicleModel> MapDTOToModel(VehicleModelDTOInsert dto, VehicleModel vehicleModel)
