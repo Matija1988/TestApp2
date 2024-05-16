@@ -34,7 +34,7 @@ namespace ProjectMVC.Controllers
 
             if(response.IsSuccessStatusCode)
             {
-                string data =  response.Content.ReadAsStringAsync().Result;
+                string data =  await response.Content.ReadAsStringAsync();
                 entityList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(data);
 
                 if(entityList is null)
@@ -54,7 +54,7 @@ namespace ProjectMVC.Controllers
             var entity = JsonConvert.SerializeObject(dto);
             StringContent content = new StringContent(entity, Encoding.UTF8, "application/json");
           
-            var response =  _httpClient.PostAsync(baseUrl, content).Result;
+            var response = await  _httpClient.PostAsync(baseUrl, content);
             
                 return RedirectToAction("Index");               
             
@@ -74,13 +74,13 @@ namespace ProjectMVC.Controllers
 
             try
             {
-                HttpResponseMessage response = _httpClient.GetAsync(baseUrl + "/FindMakerByID/" + id).Result;
+                HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindMakerByID/" + id);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
                 }
-                var data = response.Content.ReadAsStringAsync().Result;
+                var data = await response.Content.ReadAsStringAsync();
                 var entityFromDB = JsonConvert.DeserializeObject<VehicleMakeDTOReadWithoutID>(data);
                 return View(entityFromDB);
             }
@@ -93,13 +93,13 @@ namespace ProjectMVC.Controllers
 
         [HttpPost]
 
-        public IActionResult Edit(VehicleMakeDTOInsert dto, int id)
+        public async Task<IActionResult> Edit(VehicleMakeDTOInsert dto, int id)
         {
             string data = JsonConvert.SerializeObject(dto);
 
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json"); 
 
-            HttpResponseMessage response = _httpClient.PutAsync(baseUrl + "/" + id, content).Result; 
+            HttpResponseMessage response = await _httpClient.PutAsync(baseUrl + "/" + id, content); 
             
             if(response.IsSuccessStatusCode)
             {
@@ -111,15 +111,15 @@ namespace ProjectMVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            HttpResponseMessage response = _httpClient.GetAsync(baseUrl + "/FindMakerByID/" + id).Result;
+            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindMakerByID/" + id);
 
             if (!response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
-            var data = response.Content.ReadAsStringAsync().Result;
+            var data = await response.Content.ReadAsStringAsync();
             var entityFromDB = JsonConvert.DeserializeObject<VehicleMakeDTOReadWithoutID>(data);
 
             return View(entityFromDB);
@@ -127,9 +127,9 @@ namespace ProjectMVC.Controllers
 
         [HttpPost, ActionName("Delete")]
 
-        public IActionResult DeleteConfirm(int id)
+        public async Task<IActionResult> DeleteConfirm(int id)
         {
-            HttpResponseMessage response = _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleMake/" + id).Result;
+            HttpResponseMessage response = await _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleMake/" + id);
 
             if(!response.IsSuccessStatusCode)
             {
