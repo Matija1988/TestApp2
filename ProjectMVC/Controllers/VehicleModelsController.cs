@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using ProjectMVC.Models;
 using ProjectService.Model;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace ProjectMVC.Controllers
@@ -9,6 +12,8 @@ namespace ProjectMVC.Controllers
     public class VehicleModelsController : Controller
     {
         Uri baseUrl = new Uri("https://localhost:7186/VehicleModel");
+
+        Uri baseUrlForMaker = new Uri("https://localhost:7186/VehicleMake");
 
         private readonly HttpClient _httpClient;
 
@@ -38,9 +43,29 @@ namespace ProjectMVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+             PopulateDropdown();
             return View();
+        }
+
+        public void PopulateDropdown()
+        {
+            HttpResponseMessage getVehicleMake = _httpClient.GetAsync(baseUrlForMaker).Result;
+
+            string VehicleMakeData = getVehicleMake.Content.ReadAsStringAsync().Result;
+
+            var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
+
+            //IEnumerable <SelectMakerView> enumerateVehicleMake = VehicleMakeList.Select(i => 
+            //new SelectMakerView
+            //{
+            //    Id = i.Id,
+            //    Abrv = i.Abrv
+            //});
+
+            ViewBag.VehicleMakerList = new SelectList(VehicleMakeList, "Id", "Abrv");
+
         }
 
         [HttpPost]
@@ -48,6 +73,13 @@ namespace ProjectMVC.Controllers
         {
             try
             {
+                HttpResponseMessage getVehicleMake = await _httpClient.GetAsync(baseUrl);
+
+                string VehicleMakeData = await getVehicleMake.Content.ReadAsStringAsync();
+
+                var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
+                
+
                 var entity = JsonConvert.SerializeObject(dto);
                 StringContent content = new StringContent(entity, Encoding.UTF8, "application/json");
 
