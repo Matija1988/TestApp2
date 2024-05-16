@@ -57,13 +57,6 @@ namespace ProjectMVC.Controllers
 
             var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
 
-            //IEnumerable <SelectMakerView> enumerateVehicleMake = VehicleMakeList.Select(i => 
-            //new SelectMakerView
-            //{
-            //    Id = i.Id,
-            //    Abrv = i.Abrv
-            //});
-
             ViewBag.VehicleMakerList = new SelectList(VehicleMakeList, "Id", "Abrv");
 
         }
@@ -111,7 +104,7 @@ namespace ProjectMVC.Controllers
 
                 var data =  await response.Content.ReadAsStringAsync();
                 var entityFromDB = JsonConvert.DeserializeObject<VehicleModelDTOInsert>(data);
-
+                PopulateDropdown();
                 return View(entityFromDB);
             } 
             catch (Exception)
