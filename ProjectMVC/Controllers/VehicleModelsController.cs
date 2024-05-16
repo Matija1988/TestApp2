@@ -21,11 +21,11 @@ namespace ProjectMVC.Controllers
         public async Task<IActionResult> Index()
         {
             List<VehicleModelDTORead> entityList = new List<VehicleModelDTORead>();
-            HttpResponseMessage response = _httpClient.GetAsync(baseUrl).Result;
+            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
 
             if (response.IsSuccessStatusCode)
             {
-                string data = response.Content.ReadAsStringAsync().Result;
+                string data = await response.Content.ReadAsStringAsync();
                 entityList = JsonConvert.DeserializeObject<List<VehicleModelDTORead>>(data) ??
                     throw new Exception("No data found in database!!!");
 
@@ -44,14 +44,14 @@ namespace ProjectMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(VehicleModelDTOInsert dto)
+        public async Task <IActionResult> Create(VehicleModelDTOInsert dto)
         {
             try
             {
                 var entity = JsonConvert.SerializeObject(dto);
                 StringContent content = new StringContent(entity, Encoding.UTF8, "application/json");
 
-                var response = _httpClient.PostAsync(baseUrl, content).Result;
+                var response = await _httpClient.PostAsync(baseUrl, content);
 
                 return RedirectToAction("Index");   
                     
@@ -66,18 +66,18 @@ namespace ProjectMVC.Controllers
 
         [HttpGet] 
 
-        public IActionResult Edit(int id) 
+        public async Task <IActionResult> Edit(int id) 
         { 
             try
             {
-                HttpResponseMessage response = _httpClient.GetAsync(baseUrl + "/FindModel/" + id).Result;
+                HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindModel/" + id);
 
                 if(!response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
                 }
 
-                var data = response.Content.ReadAsStringAsync().Result;
+                var data =  await response.Content.ReadAsStringAsync();
                 var entityFromDB = JsonConvert.DeserializeObject<VehicleModelDTOInsert>(data);
 
                 return View(entityFromDB);
@@ -90,13 +90,13 @@ namespace ProjectMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(VehicleModelDTOInsert dto, int id)
+        public async Task <IActionResult> Edit(VehicleModelDTOInsert dto, int id)
         {
             string data = JsonConvert.SerializeObject(dto);
 
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = _httpClient.PutAsync(baseUrl + "/" + id, content).Result;
+            HttpResponseMessage response = await _httpClient.PutAsync(baseUrl + "/" + id, content);
 
             if(response.IsSuccessStatusCode)
             {
@@ -107,25 +107,25 @@ namespace ProjectMVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            HttpResponseMessage response = _httpClient.GetAsync(baseUrl + "/FindModel/" + id).Result;
+            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindModel/" + id);
 
             if(!response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
 
-            var data = response.Content.ReadAsStringAsync().Result;
+            var data = await response.Content.ReadAsStringAsync();
             var entityFromDb = JsonConvert.DeserializeObject<VehicleModelDTOReadWithoutID>(data);
 
             return View(entityFromDb);
 
         }
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirm(int id)
+        public async Task <IActionResult> DeleteConfirm(int id)
         {
-            HttpResponseMessage response = _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleModel/" + id).Result;
+            HttpResponseMessage response =  await _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleModel/" + id);
 
             if(!response.IsSuccessStatusCode) 
             { 
