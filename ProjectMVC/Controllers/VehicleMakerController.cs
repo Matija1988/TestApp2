@@ -41,11 +41,13 @@ namespace ProjectMVC.Controllers
                     return NotFound("No data in entity list!!!");
                 }
 
-                if(condition is not null && condition.Length > 1)
+                if(condition is not null && condition.Length > 0)
                 {
                     condition = condition.ToLower();
                     entityList = entityList.Where(n => n.Abrv.ToLower().Contains(condition) 
-                    || n.Name.ToLower().Contains(condition)).ToList();
+                    || n.Name.ToLower().Contains(condition))
+                        .OrderBy(n => n.Abrv)
+                        .ToList();
                 }
 
             }

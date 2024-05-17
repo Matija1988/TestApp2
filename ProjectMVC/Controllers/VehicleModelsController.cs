@@ -23,8 +23,8 @@ namespace ProjectMVC.Controllers
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = baseUrl;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
+       
+        public async Task<IActionResult> Index(string condition)
         {
             List<VehicleModelDTORead> entityList = new List<VehicleModelDTORead>();
             HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
@@ -38,6 +38,17 @@ namespace ProjectMVC.Controllers
                 if (entityList is null)
                 {
                     return NotFound("No data found in database");
+                }
+
+                if(condition is not null && condition.Length > 0)
+                {
+                    condition = condition.ToLower();
+
+                    entityList = entityList.Where(n => n.Abrv.ToLower().Contains(condition) 
+                    || n.Name.ToLower().Contains(condition) 
+                    || n.Maker.ToLower().Contains(condition))
+                        .OrderBy(n => n.Maker)
+                        .ToList();
                 }
             }
             return View(entityList);

@@ -5,53 +5,62 @@
 }
 
 <h1>Vehicle models</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Maker)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Abrv)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="row">
+    <p class="col">
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </p>
+    <div class="col-md-6">
+        <form class="d-flex" asp-action="Index" asp-controller="VehicleModels">
+            <input name="condition" class="form-control me-1" type="search" placeholder="Search" aria-label="Search" />
+            <button class="btn btn-dark" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Index" class="btn btn-outline-dark">Load full list</a>
+    </div>
+</div>
+    <table class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Maker)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Abrv)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-
-
-                <td>
-                    <a class="btn btn-secondary" asp-action="Edit" asp-controller="VehicleModels" asp-route-id="@item.Id">Edit</a>
-                    <a class="btn btn-danger" asp-action="Delete" asp-controller="VehicleModels" asp-route-id="@item.Id"
-                       onclick="return confirm('Are you sure you waht to delete this entry?')"
-                       >Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Maker)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Abrv)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Maker)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Abrv)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+
+                    <td>
+                        <a class="btn btn-secondary" asp-action="Edit" asp-controller="VehicleModels" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-controller="VehicleModels" asp-route-id="@item.Id"
+                           onclick="return confirm('Are you sure you waht to delete this entry?')">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
