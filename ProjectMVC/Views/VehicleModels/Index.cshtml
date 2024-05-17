@@ -19,50 +19,87 @@
         <a asp-action="Index" class="btn btn-outline-dark">Load full list</a>
     </div>
 </div>
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    <a asp-controller="VehicleModels" asp-action="Index" asp-route-sortOrder=@ViewData["MakerSortParam"] class="text-black">
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                <a asp-controller="VehicleModels" asp-action="Index" asp-route-sortOrder=@ViewData["MakerSortParam"] class="text-black">
                     @Html.DisplayNameFor(model => model.Maker)
-                    </a>
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Abrv)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th></th>
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Abrv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Maker)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Abrv)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+
+                <td>
+                    <a class="btn btn-secondary" asp-action="Edit" asp-controller="VehicleModels" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-controller="VehicleModels" asp-route-id="@item.Id"
+                       onclick="return confirm('Are you sure you waht to delete this entry?')">Delete</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Maker)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Abrv)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-
-
-                    <td>
-                        <a class="btn btn-secondary" asp-action="Edit" asp-controller="VehicleModels" asp-route-id="@item.Id">Edit</a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-controller="VehicleModels" asp-route-id="@item.Id"
-                           onclick="return confirm('Are you sure you waht to delete this entry?')">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6">
+        
+        <nav>
+            <ul class="pagination justify-content-end">
+                <li class="page-item">
+                    <a class="page-link text-black" asp-route-pageNumber="">
+                        <span>First</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-black" asp-route-pageNumber="">
+                        <span>Previous</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= (Model.Count() / 2); i++)
+                {
+                    <li class="page-item">
+                        <a class="page-link text-black" asp-route-pageNumber="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item">
+                    <a class="page-link text-black" asp-route-pageNumber="">
+                        <span>Next</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-black" asp-route-pageNumber="">
+                        <span>Last</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

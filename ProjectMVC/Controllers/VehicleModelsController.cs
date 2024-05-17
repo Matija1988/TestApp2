@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Azure;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using NuGet.Versioning;
 using ProjectMVC.Models;
 using ProjectService.Model;
+using System.Drawing.Printing;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -24,10 +26,13 @@ namespace ProjectMVC.Controllers
             _httpClient.BaseAddress = baseUrl;
         }
 
-        public async Task<IActionResult> Index(string condition, string sortOrder)
+        public async Task<IActionResult> Index(string condition, string sortOrder, int pageNumber)
         {
             List<VehicleModelDTORead> entityList = new List<VehicleModelDTORead>();
-            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
+
+            int pageSize = 3;
+
+            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/Paginate/" + pageNumber + "/" + pageSize);
 
             if (response.IsSuccessStatusCode)
             {
@@ -41,23 +46,23 @@ namespace ProjectMVC.Controllers
                 return NotFound("No data found in database");
             }
 
-            if (condition is not null && condition.Length > 0)
-            {
-                condition = condition.ToLower();
+            //if (condition is not null && condition.Length > 0)
+            //{
+            //    condition = condition.ToLower();
 
-                entityList = entityList.Where(n => n.Abrv.ToLower().Contains(condition)
-                || n.Name.ToLower().Contains(condition)
-                || n.Maker.ToLower().Contains(condition))
-                    .OrderBy(n => n.Maker)
-                    .ToList();
-            }
+            //    entityList = entityList.Where(n => n.Abrv.ToLower().Contains(condition)
+            //    || n.Name.ToLower().Contains(condition)
+            //    || n.Maker.ToLower().Contains(condition))
+            //        .OrderBy(n => n.Maker)
+            //        .ToList();
+            //}
 
-            ViewData["MakerSortParam"] = string.IsNullOrEmpty(sortOrder) ? "maker_desc" : "";
+            ViewData["ModelSortParam"] = string.IsNullOrEmpty(sortOrder) ? "model_desc" : "";
 
             switch (sortOrder)
             {
-                case "maker_desc":
-                    entityList = entityList.OrderByDescending(e => e.Maker).ToList();
+                case "model_desc":
+                    entityList = entityList.OrderByDescending(e => e.Abrv).ToList();
                     break;
 
                 default:
@@ -69,12 +74,43 @@ namespace ProjectMVC.Controllers
             return View(entityList);
         }
 
+        [HttpPost]
+
+        //public async Task<IActionResult> PaginateRequest(int pageNumber, int pageSize)
+        //{
+        //    if (pageNumber < 1)
+        //    {
+        //        pageNumber = 1;
+        //    }
+
+        //    if(pageSize < 1)
+        //    {
+        //        pageSize = 1; 
+        //    }
+        //    List<VehicleModelDTORead> entityList = new List<VehicleModelDTORead>();
+
+        //    HttpResponseMessage sendPageNumber 
+        //        = await _httpClient.GetAsync(baseUrl + "/Paginate/" + pageNumber + "/" + pageSize);
+
+        //    if (sendPageNumber.IsSuccessStatusCode)
+        //    {
+        //        string data = await sendPageNumber.Content.ReadAsStringAsync();
+        //        entityList = JsonConvert.DeserializeObject<List<VehicleModelDTORead>>(data) ??
+        //            throw new Exception("No data found in database!!!");
+        //    }
+
+
+
+        //    return null;
+        //}
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             await PopulateDropdown();
             return View();
         }
+
 
 
 
