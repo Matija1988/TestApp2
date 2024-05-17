@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ProjectMVC.Models;
 using ProjectService.Model;
 using System.Text;
 
@@ -26,9 +27,17 @@ namespace ProjectMVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Index(string condition, string sortOrder)
+        public async Task<IActionResult> Index(string condition, string sortOrder, int pageNumber, int No)
         {
             List<VehicleMakeDTORead> entityList = new List<VehicleMakeDTORead>();
+
+            if(pageNumber < 0)
+            {
+                pageNumber = 1;
+            }
+
+            int pageSize = 5;
+
             HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
 
             if(response.IsSuccessStatusCode)
@@ -65,7 +74,7 @@ namespace ProjectMVC.Controllers
 
             }
 
-            return View(entityList);
+            return View(await PaginatedListViewModel<VehicleMakeDTORead>.Paginate(entityList, pageNumber, pageSize));
         }
 
         [HttpPost]
