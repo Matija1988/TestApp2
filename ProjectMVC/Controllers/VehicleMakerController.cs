@@ -26,7 +26,7 @@ namespace ProjectMVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Index(string condition)
+        public async Task<IActionResult> Index(string condition, string sortOrder)
         {
             List<VehicleMakeDTORead> entityList = new List<VehicleMakeDTORead>();
             HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
@@ -44,10 +44,23 @@ namespace ProjectMVC.Controllers
                 if(condition is not null && condition.Length > 0)
                 {
                     condition = condition.ToLower();
-                    entityList = entityList.Where(n => n.Abrv.ToLower().Contains(condition) 
-                    || n.Name.ToLower().Contains(condition))
-                        .OrderBy(n => n.Abrv)
+                    entityList = entityList.Where(e => e.Abrv.ToLower().Contains(condition) 
+                    || e.Name.ToLower().Contains(condition))
+                        .OrderBy(e => e.Abrv)
                         .ToList();
+                }
+
+                ViewData["AbrvSortParam"] = string.IsNullOrEmpty(sortOrder) ? "abrv_desc" : "";
+
+                switch(sortOrder)
+                {
+                    case "abrv_desc":
+                        entityList = entityList.OrderByDescending(e => e.Abrv).ToList();
+                        break;
+
+                    default:
+                        entityList = entityList.OrderBy(e => e.Abrv).ToList();
+                        break;
                 }
 
             }

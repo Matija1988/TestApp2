@@ -25,36 +25,41 @@
         <tr>
             <th>#</th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <a asp-controller="VehicleMaker" asp-action="Index" asp-route-sortOrder=@ViewData["AbrvSortParam"] class="text-black">
+                    @Html.DisplayNameFor(model => model.Abrv)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Abrv)
+          
+                    @Html.DisplayNameFor(model => model.Name)
+                
             </th>
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-        
-@foreach (var item in Model) {
+
+        @foreach (var item in Model)
+        {
 
             <tr>
                 <td>
-                    
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Abrv)
+                </td>
+
+                <td>
                     @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Abrv)
-            </td>
-            <td>
-                <a class="btn btn-secondary" asp-action="Edit" asp-controller="VehicleMaker" asp-route-id="@item.Id">Edit</a>
-                <a class="btn btn-danger" asp-action="Delete" asp-controller="VehicleMaker" asp-route-id="@item.Id"
-                onclick="return confirm('Are you sure you waht to delete this entry?')"
-                >Delete</a>  
-            </td>
-        </tr>
-}
+                </td>
+                <td>
+                    <a class="btn btn-secondary" asp-action="Edit" asp-controller="VehicleMaker" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-controller="VehicleMaker" asp-route-id="@item.Id"
+                       onclick="return confirm('Are you sure you waht to delete this entry?')">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 
 </table>
