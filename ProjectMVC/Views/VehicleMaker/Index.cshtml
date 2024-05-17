@@ -5,13 +5,25 @@
 }
 
 <h1>Vehicle makers</h1>
+<div class="row">
+    <p class="col">
+        <a asp-controller="VehicleMaker" asp-action="Create" class="btn btn-primary">Create New</a>
+    </p>
+    <div class="col-md-6">
+        <form class="d-flex" asp-action="Index" asp-controller="VehicleMaker">
+            <input name="condition" class="form-control me-1" type="search" placeholder="Search" aria-label="Search" />
+            <button class="btn btn-dark" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Index" class="btn btn-outline-dark">Load full list</a>
+    </div>
+</div>
 
-<p>
-    <a asp-controller="VehicleMaker" asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th>#</th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -22,19 +34,74 @@
         </tr>
     </thead>
     <tbody>
+        
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
+
+            <tr>
+                <td>
+                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Abrv)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                <a class="btn btn-secondary" asp-action="Edit" asp-controller="VehicleMaker" asp-route-id="@item.Id">Edit</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-controller="VehicleMaker" asp-route-id="@item.Id"
+                onclick="return confirm('Are you sure you waht to delete this entry?')"
+                >Delete</a>  
             </td>
         </tr>
 }
     </tbody>
+
 </table>
+
+<div class="row">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination justify-content-end">
+                <li class="page-item">
+                    <a class="page-link" href="">
+                        <span>First</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="">
+                        <span>Previous</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="">
+                        1
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="">
+                        2
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="">
+                        3
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="">
+                        <span>Next</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="">
+                        <span>Last</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</div>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using NuGet.Versioning;
 using ProjectMVC.Models;
 using ProjectService.Model;
 using System.Linq.Expressions;
@@ -45,21 +46,11 @@ namespace ProjectMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-             PopulateDropdown();
+            await PopulateDropdown();
             return View();
         }
 
-        public void PopulateDropdown()
-        {
-            HttpResponseMessage getVehicleMake = _httpClient.GetAsync(baseUrlForMaker).Result;
-
-            string VehicleMakeData = getVehicleMake.Content.ReadAsStringAsync().Result;
-
-            var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
-
-            ViewBag.VehicleMakerList = new SelectList(VehicleMakeList, "Id", "Abrv");
-
-        }
+        
 
         [HttpPost]
         public async Task <IActionResult> Create(VehicleModelDTOInsert dto)
@@ -97,14 +88,15 @@ namespace ProjectMVC.Controllers
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindModel/" + id);
 
-                if(!response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
                 }
 
                 var data =  await response.Content.ReadAsStringAsync();
                 var entityFromDB = JsonConvert.DeserializeObject<VehicleModelDTOInsert>(data);
-                PopulateDropdown();
+
+                await PopulateDropdown();
                 return View(entityFromDB);
             } 
             catch (Exception)
@@ -131,24 +123,9 @@ namespace ProjectMVC.Controllers
 
         }
 
+        
         [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindModel/" + id);
-
-            if(!response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
-            }
-
-            var data = await response.Content.ReadAsStringAsync();
-            var entityFromDb = JsonConvert.DeserializeObject<VehicleModelDTOReadWithoutID>(data);
-
-            return View(entityFromDb);
-
-        }
-        [HttpPost, ActionName("Delete")]
-        public async Task <IActionResult> DeleteConfirm(int id)
+        public async Task <IActionResult> Delete(int id)
         {
             HttpResponseMessage response =  await _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleModel/" + id);
 
@@ -159,6 +136,18 @@ namespace ProjectMVC.Controllers
             return RedirectToAction("Index");
 
         }
+        public async Task PopulateDropdown()
+        {
+            HttpResponseMessage getVehicleMake = await _httpClient.GetAsync(baseUrlForMaker);
+
+            string VehicleMakeData = await getVehicleMake.Content.ReadAsStringAsync();
+
+            var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
+
+            ViewBag.VehicleMakerList = new SelectList(VehicleMakeList, "Id", "Abrv");
+
+        }
+
 
     }
 }

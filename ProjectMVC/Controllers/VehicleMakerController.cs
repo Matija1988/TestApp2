@@ -30,17 +30,18 @@ namespace ProjectMVC.Controllers
         public async Task<IActionResult> Index()
         {
             List<VehicleMakeDTORead> entityList = new List<VehicleMakeDTORead>();
-            HttpResponseMessage response = _httpClient.GetAsync(baseUrl).Result;
+            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
 
             if(response.IsSuccessStatusCode)
             {
                 string data =  await response.Content.ReadAsStringAsync();
                 entityList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(data);
 
-                if(entityList is null)
+                if (entityList is null)
                 {
                     return NotFound("No data in entity list!!!");
                 }
+
             }
 
             return View(entityList);
@@ -111,23 +112,8 @@ namespace ProjectMVC.Controllers
         }
 
         [HttpGet]
+
         public async Task<IActionResult> Delete(int id)
-        {
-            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindMakerByID/" + id);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
-            }
-            var data = await response.Content.ReadAsStringAsync();
-            var entityFromDB = JsonConvert.DeserializeObject<VehicleMakeDTOReadWithoutID>(data);
-
-            return View(entityFromDB);
-        }
-
-        [HttpPost, ActionName("Delete")]
-
-        public async Task<IActionResult> DeleteConfirm(int id)
         {
             HttpResponseMessage response = await _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleMake/" + id);
 

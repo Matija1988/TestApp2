@@ -155,6 +155,45 @@ namespace ProjectService.Service
 
         }
 
+        public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetSearch(string condition = "")
+        {
+            var response = new ServiceResponse<List<VehicleMakeDTORead>>();
+            condition = condition.ToLower();
+
+            response.Data = await ReturnSearchDTOList(condition);
+            
+            if (response.Data is null)
+            {
+                response.Success = false;
+                response.Message = "No vehicle makers under search condition found in database";
+                return response;
+            }
+
+            response.Success = true;
+
+            return response;
+        }
+
+        private async Task<List<VehicleMakeDTORead>?> ReturnSearchDTOList(string condition)
+        {
+            var _mapper = await _mapping.VehicleMakerMapReadToDTO();
+
+            try
+            {
+                var data = _context.VehicleMakers.Where(a => EF.Functions.Like(a.Name.ToLower(), "%" + condition + "%")
+                || EF.Functions.Like(a.Abrv.ToLower(), "%" + condition + "%"))
+                    .OrderBy(a => a.Abrv)
+                    .ToList();
+
+                return _mapper.Map<List<VehicleMakeDTORead>>(data);
+            } 
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+
         private async Task<List<VehicleMakeDTORead>> ReturnPaginatedDTOList(int byPage, int page, string condition)
         {
             var _mapper = await _mapping.VehicleMakerMapReadToDTO();
@@ -183,21 +222,7 @@ namespace ProjectService.Service
             return _mapper.Map<VehicleMakeDTOReadWithoutID>(entity);
         }
 
-        /// <summary>
-        /// Stavlja podatke iz DTO u model na odgovarajuce atribute
-        /// Sets data from DTO in the model at appropriate attributes
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-
-        private async Task<VehicleMake> MapDTOToModel(VehicleMakeDTOInsert dto, VehicleMake entity)
-        {
-            entity.Name = dto.Name;
-            entity.Abrv = dto.Abrv;
-
-            return entity;
-        }
+        
 
         /// <summary>
         /// Uzima listu modela, vraca listu DTO
@@ -248,6 +273,22 @@ namespace ProjectService.Service
                 throw new Exception(ex.Message);
 
             }
+        }
+
+        /// <summary>
+        /// Stavlja podatke iz DTO u model na odgovarajuce atribute
+        /// Sets data from DTO in the model at appropriate attributes
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+
+        private async Task<VehicleMake> MapDTOToModel(VehicleMakeDTOInsert dto, VehicleMake entity)
+        {
+            entity.Name = dto.Name;
+            entity.Abrv = dto.Abrv;
+
+            return entity;
         }
 
         /// <summary>
