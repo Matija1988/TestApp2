@@ -108,15 +108,13 @@ namespace ProjectService.Controllers
         [HttpGet]
         [Route("Paginate/{page:int}")]
 
-        public async Task<IActionResult> GetPagination(int page, string condition)
+        public async Task<IActionResult> GetPagination(int page, int byPage)
         {
-            var response = await _vehicleMakeService.GetPagination(page, condition);
+            var response = await _vehicleMakeService.GetPagination(page, byPage);
 
-            if(response.Success)
-            {
-                return StatusCode(StatusCodes.Status200OK, response.Data);
-            }
-            return BadRequest(response.Message);
+            
+                return StatusCode(StatusCodes.Status200OK, response);
+            
         }
 
     }

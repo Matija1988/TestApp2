@@ -14,7 +14,7 @@ namespace ProjectService.Controllers
 
         Task<IActionResult> DeleteEntity(int id);
 
-        Task<IActionResult> GetPagination(int page, string condition);
+        Task<IActionResult> GetPagination(int page, int byPage);
 
     }
 }

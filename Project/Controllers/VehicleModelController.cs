@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
 using ProjectService.Model;
 using ProjectService.Service;
 
@@ -102,17 +103,33 @@ namespace ProjectService.Controllers
         }
 
         [HttpGet]
-        [Route("Paginate/{page:int}")]
+        [Route("Paginate/{pageIndex:int}/{pageSize:int}")]
 
-        public async Task<IActionResult> GetPagination(int page, string condition)
+        public async Task<IActionResult> GetPagination(int pageIndex, int pageSize)
         {
-            var response = await _vehicleModelService.GetPagination(page, condition);
-
-            if (response.Success)
-            {
-                return StatusCode(StatusCodes.Status200OK, response.Data);
+            if (pageIndex < 1) 
+            { 
+                pageIndex = 1; 
             }
-            return BadRequest(response.Message);
+            if (pageSize < 1)
+            {
+                pageSize = 1;
+            }
+
+
+            try
+            {
+                var response = await _vehicleModelService.GetPagination(pageIndex, pageSize);
+
+                return StatusCode(StatusCodes.Status200OK, response.Source);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
+            
         }
     } 
 }

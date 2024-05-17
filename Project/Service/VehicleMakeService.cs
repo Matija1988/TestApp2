@@ -134,28 +134,32 @@ namespace ProjectService.Service
             return response;
 
         }
-        public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetPagination(int page, string condition = "")
+        //public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetPagination(int page, string condition = "")
+        //{
+        //    var response = new ServiceResponse<List<VehicleMakeDTORead>>();
+        //    var byPage = 10;
+        //    condition = condition.ToLower();
+
+        //    response.Data = await ReturnPaginatedDTOList(byPage, page, condition); 
+
+        //    if(response.Data is null)
+        //    {
+        //        response.Success = false;
+        //        response.Message = "No vehicle makers under search condition found in database";
+        //        return response;
+        //    }
+
+        //    response.Success = true;
+
+        //    return response;
+
+        //}
+
+
+        public async Task<PaginatedView<VehicleModelDTORead>> GetPagination(int page, int byPage)
         {
-            var response = new ServiceResponse<List<VehicleMakeDTORead>>();
-            var byPage = 10;
-            condition = condition.ToLower();
-
-            response.Data = await ReturnPaginatedDTOList(byPage, page, condition); 
-
-            if(response.Data is null)
-            {
-                response.Success = false;
-                response.Message = "No vehicle makers under search condition found in database";
-                return response;
-            }
-
-            response.Success = true;
-
-            return response;
-
+            return null;
         }
-
-        
 
         private async Task<List<VehicleMakeDTORead>> ReturnPaginatedDTOList(int byPage, int page, string condition)
         {

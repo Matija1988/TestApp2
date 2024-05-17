@@ -91,32 +91,59 @@ namespace ProjectService.Service
             return response;
         }
 
-        public async Task<ServiceResponse<List<VehicleModelDTORead>>> GetPagination(int page, string condition = "")
+        //public async Task<ServiceResponse<List<VehicleModelDTORead>>> GetPagination(int page, string condition = "")
+        //{
+        //    var response = new ServiceResponse<List<VehicleModelDTORead>>();
+
+        //    var byPage = 10;
+
+        //    condition = condition.ToLower();
+
+        //    response.Data = await ReturnPaginatedDTOList(byPage, page, condition);  
+
+        //    if (response.Data is null)
+        //    {
+        //        response.Success = false;
+        //        response.Message = "No vehicle models under search condition found in database!!!";
+        //        return response;
+
+        //    }
+
+        //    response.Success = true;
+        //    return response;
+
+        //}
+
+        public async Task <PaginatedView<VehicleModelDTORead>> GetPagination(int page, int byPage)
         {
-            var response = new ServiceResponse<List<VehicleModelDTORead>>();
+           // var response = new ServiceResponse<List<VehicleModelDTORead>>();
+ 
+            var response = await Pagination(page, byPage);
 
-            var byPage = 10;
-
-            condition = condition.ToLower();
-
-            response.Data = await ReturnPaginatedDTOList(byPage, page, condition);  
-
-            if (response.Data is null)
-            {
-                response.Success = false;
-                response.Message = "No vehicle models under search condition found in database!!!";
-                return response;
-
-            }
-
-            response.Success = true;
             return response;
 
         }
 
-        
+        private async Task <PaginatedView<VehicleModelDTORead>> Pagination(int pageIndex, int pageSize)
+        {
+            var _mapper = await _mapping.VehicleModelMapReadToDTO();
+            try
+            {
 
-        private async Task<List<VehicleModelDTORead>?> ReturnPaginatedDTOList(int byPage, int page, string condition)
+                var data = _context.VehicleModels.Include(vm => vm.Make).ToList();
+
+                var items = _mapper.Map<List<VehicleModelDTORead>>(data);
+
+                return await PaginatedView<VehicleModelDTORead>.PaginateAsync(items, pageIndex, pageSize);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private async Task<List<VehicleModelDTORead>> ReturnPaginatedDTOList(int byPage, int page, string condition)
         {
             var _mapper = await _mapping.VehicleModelMapReadToDTO();
             try
