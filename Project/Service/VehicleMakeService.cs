@@ -155,44 +155,7 @@ namespace ProjectService.Service
 
         }
 
-        public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetSearch(string condition = "")
-        {
-            var response = new ServiceResponse<List<VehicleMakeDTORead>>();
-            condition = condition.ToLower();
-
-            response.Data = await ReturnSearchDTOList(condition);
-            
-            if (response.Data is null)
-            {
-                response.Success = false;
-                response.Message = "No vehicle makers under search condition found in database";
-                return response;
-            }
-
-            response.Success = true;
-
-            return response;
-        }
-
-        private async Task<List<VehicleMakeDTORead>?> ReturnSearchDTOList(string condition)
-        {
-            var _mapper = await _mapping.VehicleMakerMapReadToDTO();
-
-            try
-            {
-                var data = _context.VehicleMakers.Where(a => EF.Functions.Like(a.Name.ToLower(), "%" + condition + "%")
-                || EF.Functions.Like(a.Abrv.ToLower(), "%" + condition + "%"))
-                    .OrderBy(a => a.Abrv)
-                    .ToList();
-
-                return _mapper.Map<List<VehicleMakeDTORead>>(data);
-            } 
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
-        }
+        
 
         private async Task<List<VehicleMakeDTORead>> ReturnPaginatedDTOList(int byPage, int page, string condition)
         {
