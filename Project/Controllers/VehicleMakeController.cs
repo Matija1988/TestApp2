@@ -106,16 +106,46 @@ namespace ProjectService.Controllers
         }
 
         [HttpGet]
-        [Route("Paginate/{page:int}")]
+        [Route("Paginate/{pageIndex:int}/{pageSize:int}")]
 
-        public async Task<IActionResult> GetPagination(int page, int byPage)
+        public async Task<IActionResult> GetPagination(int pageIndex, int pageSize)
         {
-            var response = await _vehicleMakeService.GetPagination(page, byPage);
+            if(pageIndex < 1)
+            {
+                return BadRequest("Page index must not be lower than 1");
+            }
+            if(pageSize < 1)
+            {
+                return BadRequest("Page size must not be lower than 1");
+            }
 
-            
-                return StatusCode(StatusCodes.Status200OK, response);
-            
+            var response = await _vehicleMakeService.GetPagination(pageIndex, pageSize);
+            if(response.Source is not null ) { 
+            return StatusCode(StatusCodes.Status200OK, response.Source);
+            }
+            return StatusCode(StatusCodes.Status404NotFound);
         }
+
+        [HttpGet]
+        [Route("Search/{condition}")]
+
+        public async Task<IActionResult> SearchByNameOrAbrv(string condition)
+        {
+            var response = await _vehicleMakeService.SearchByNameOrAbrv(condition);
+
+            if(condition.Length < 2)
+            {
+                return BadRequest("Minimal character input for valid search is 2");
+            }
+
+            if(response.Success && response.Data is not null)
+            {
+                return StatusCode(StatusCodes.Status200OK, response.Data);
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound, response.Message);
+        }
+ 
 
     }
 }

@@ -27,7 +27,7 @@ namespace ProjectMVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Index(string condition, string sortOrder, int pageNumber, int No)
+        public async Task<IActionResult> Index(string condition, string sortOrder, int pageNumber)
         {
             List<VehicleMakeDTORead> entityList = new List<VehicleMakeDTORead>();
 
@@ -52,26 +52,12 @@ namespace ProjectMVC.Controllers
 
                 if(condition is not null && condition.Length > 0)
                 {
-                    condition = condition.ToLower();
-                    entityList = entityList.Where(e => e.Abrv.ToLower().Contains(condition) 
-                    || e.Name.ToLower().Contains(condition))
-                        .OrderBy(e => e.Abrv)
-                        .ToList();
+                  entityList = await Filter(condition, entityList);
+                  
                 }
 
-                ViewData["AbrvSortParam"] = string.IsNullOrEmpty(sortOrder) ? "abrv_desc" : "";
-
-                switch(sortOrder)
-                {
-                    case "abrv_desc":
-                        entityList = entityList.OrderByDescending(e => e.Abrv).ToList();
-                        break;
-
-                    default:
-                        entityList = entityList.OrderBy(e => e.Abrv).ToList();
-                        break;
-                }
-
+               entityList = await SortByAbrv(sortOrder, entityList);
+               
             }
 
             return View(await PaginatedListViewModel<VehicleMakeDTORead>.Paginate(entityList, pageNumber, pageSize));
@@ -153,6 +139,34 @@ namespace ProjectMVC.Controllers
             }
 
             return RedirectToAction("Index");
+
+        }
+        private async Task<List<VehicleMakeDTORead>> Filter(string condition, List<VehicleMakeDTORead> list)
+        {
+            condition = condition.ToLower();
+
+            return list = list.Where(e => e.Abrv.ToLower().Contains(condition)
+            || e.Name.ToLower().Contains(condition))
+                .OrderBy(e => e.Abrv)
+                .ToList();
+        }
+
+        private async Task<List<VehicleMakeDTORead>> SortByAbrv(string sortOrder, List<VehicleMakeDTORead> entityList)
+        {
+            ViewData["AbrvSortParam"] = string.IsNullOrEmpty(sortOrder) ? "abrv_desc" : "";
+
+            switch (sortOrder)
+            {
+                case "abrv_desc":
+                    entityList = entityList.OrderByDescending(e => e.Abrv).ToList();
+                    break;
+
+                default:
+                    entityList = entityList.OrderBy(e => e.Abrv).ToList();
+                    break;
+            }
+
+            return entityList;
 
         }
 

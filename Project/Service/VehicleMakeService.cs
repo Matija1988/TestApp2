@@ -155,30 +155,45 @@ namespace ProjectService.Service
 
         //}
 
-
-        public async Task<PaginatedView<VehicleModelDTORead>> GetPagination(int page, int byPage)
-        {
-            return null;
-        }
-
-        private async Task<List<VehicleMakeDTORead>> ReturnPaginatedDTOList(int byPage, int page, string condition)
+        public async Task<PaginatedView<VehicleMakeDTORead>> GetPagination(int pageIndex, int pageSize)
         {
             var _mapper = await _mapping.VehicleMakerMapReadToDTO();
-
             try
             {
-                var data = _context.VehicleMakers.Where(a => EF.Functions.Like(a.Name.ToLower(), "%" + condition + "%")
-                || EF.Functions.Like(a.Abrv.ToLower(), "%" + condition + "%"))
-                    .Skip((byPage * page) - byPage)
-                    .Take(byPage)
-                    .OrderBy(a => a.Name)
-                    .ToList();
 
-                return _mapper.Map<List<VehicleMakeDTORead>>(data);
+                var data = _context.VehicleMakers.ToListAsync();
+
+                var items = _mapper.Map<List<VehicleMakeDTORead>>(data);
+
+                return await PaginatedView<VehicleMakeDTORead>.PaginateAsync(items, pageIndex, pageSize);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-               throw new Exception(ex.Message);
+
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<List<VehicleMakeDTORead>>> SearchByNameOrAbrv(string condition)
+        {
+            
+            var items = await _context.VehicleMakers.Where(a => EF.Functions.Like(a.Name.ToLower(), "%" + condition + "%")
+                || EF.Functions.Like(a.Abrv.ToLower(), "%" + condition + "%"))
+                .OrderBy(a => a.Abrv)
+                .ToListAsync();
+
+            var response = new ServiceResponse<List<VehicleMakeDTORead>>();
+
+            if(items is null || items.Count < 1)
+            {
+                response.Success = false;
+                response.Message = "Entity matching name or abbreviation '" +  condition + "' not found in database!!!";
+                return response;
+            }
+            else { 
+            response.Data = await ReturnMappedList(items);
+
+            return response;
             }
         }
 
@@ -302,6 +317,6 @@ namespace ProjectService.Service
             }
         }
 
-        
+       
     }
 }

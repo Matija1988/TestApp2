@@ -16,5 +16,7 @@ namespace ProjectService.Controllers
 
         Task<IActionResult> GetPagination(int page, int byPage);
 
+        Task<IActionResult> SearchByNameOrAbrv(string condition);
+
     }
 }

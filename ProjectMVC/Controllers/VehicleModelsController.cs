@@ -30,51 +30,34 @@ namespace ProjectMVC.Controllers
         {
             List<VehicleModelDTORead> entityList = new List<VehicleModelDTORead>();
 
-            int pageSize = 3;
+            int pageSize = 5;
 
-            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/Paginate/" + pageNumber + "/" + pageSize);
+            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
 
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
                 entityList = JsonConvert.DeserializeObject<List<VehicleModelDTORead>>(data) ??
                     throw new Exception("No data found in database!!!");
+
+                if (entityList is null)
+                {
+                    return NotFound("No data found in database");
+                }
+
+                if (condition is not null && condition.Length > 0)
+                {
+                    entityList = await Filter(condition, entityList);
+                }
+
+                entityList = await SortByAbrv(sortOrder, entityList);
+
             }
 
-            if (entityList is null)
-            {
-                return NotFound("No data found in database");
-            }
-
-            //if (condition is not null && condition.Length > 0)
-            //{
-            //    condition = condition.ToLower();
-
-            //    entityList = entityList.Where(n => n.Abrv.ToLower().Contains(condition)
-            //    || n.Name.ToLower().Contains(condition)
-            //    || n.Maker.ToLower().Contains(condition))
-            //        .OrderBy(n => n.Maker)
-            //        .ToList();
-            //}
-
-            ViewData["ModelSortParam"] = string.IsNullOrEmpty(sortOrder) ? "model_desc" : "";
-
-            switch (sortOrder)
-            {
-                case "model_desc":
-                    entityList = entityList.OrderByDescending(e => e.Abrv).ToList();
-                    break;
-
-                default:
-                    entityList = entityList.OrderBy(e => e.Maker).ToList();
-                break;
-            }
-
-
-            return View(entityList);
+            return View(await PaginatedListViewModel<VehicleModelDTORead>.Paginate(entityList, pageNumber, pageSize));
         }
 
-        [HttpPost]
+//        [HttpPost]
 
         //public async Task<IActionResult> PaginateRequest(int pageNumber, int pageSize)
         //{
@@ -210,6 +193,35 @@ namespace ProjectMVC.Controllers
 
         }
 
+        private async Task<List<VehicleModelDTORead>> Filter(string condition, List<VehicleModelDTORead> list)
+        {
+            condition = condition.ToLower();
+
+            return list = list.Where(n => n.Abrv.ToLower().Contains(condition)
+            || n.Name.ToLower().Contains(condition)
+            || n.Maker.ToLower().Contains(condition))
+                .OrderBy(n => n.Maker)
+                .ToList();
+        }
+
+        private async Task<List<VehicleModelDTORead>> SortByAbrv(string sortOrder, List<VehicleModelDTORead> entityList)
+        {
+            ViewData["MakerSortParam"] = string.IsNullOrEmpty(sortOrder) ? "maker_desc" : "";
+
+            switch (sortOrder)
+            {
+                case "maker_desc":
+                    entityList = entityList.OrderByDescending(e => e.Maker).ToList();
+                    break;
+
+                default:
+                    entityList = entityList.OrderBy(e => e.Maker).ToList();
+                    break;
+            }
+
+            return entityList;
+
+        }
 
     }
 }

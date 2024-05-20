@@ -114,11 +114,36 @@ namespace ProjectService.Service
 
         //}
 
-        public async Task <PaginatedView<VehicleModelDTORead>> GetPagination(int page, int byPage)
+        public async Task <ServiceResponse<List<VehicleModelDTORead>>> SearchByNameOrAbrv(string condition)
         {
-           // var response = new ServiceResponse<List<VehicleModelDTORead>>();
+            
+            var items = await _context.VehicleModels.Include(a=> a.Make)
+                .Where(a => EF.Functions.Like(a.Name.ToLower(), "%" + condition + "%")
+                || EF.Functions.Like(a.Abrv.ToLower(), "%" + condition + "%")
+                || EF.Functions.Like(a.Make.Abrv.ToLower(), "%" + condition + "%"))
+                .OrderBy(a => a.Make.Abrv)
+                .ToListAsync();
+
+            
+            var response = new ServiceResponse<List<VehicleModelDTORead>>();
+
+            if (items is null || items.Count < 1)
+            {
+                response.Success = false;
+                response.Message = "Entity with name or abbreviation '" + condition + "' not found in database!!!";
+                return response;
+            }
+
+            response.Data = await ReturnMappedList(items);
+
+            return response;
+
+        }
+
+        public async Task <PaginatedView<VehicleModelDTORead>> GetPagination(int pageIndex, int pageSize)
+        {
  
-            var response = await Pagination(page, byPage);
+            var response = await Pagination(pageIndex, pageSize);
 
             return response;
 
@@ -143,27 +168,7 @@ namespace ProjectService.Service
             }
         }
 
-        private async Task<List<VehicleModelDTORead>> ReturnPaginatedDTOList(int byPage, int page, string condition)
-        {
-            var _mapper = await _mapping.VehicleModelMapReadToDTO();
-            try
-            {
-                var data = _context.VehicleModels.Include(vm => vm.Make)
-                    .Where(e => EF.Functions.Like(e.Name.ToLower(), "%" + condition + "%")
-                    || EF.Functions.Like(e.Abrv.ToLower(), "%" + condition + "%"))
-                    .Skip((byPage * page) - byPage)
-                    .Take(byPage)
-                    .OrderBy(a => a.Make.Abrv)
-                    .ToList();
-
-                return _mapper.Map<List<VehicleModelDTORead>>(data);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
+        
         private async Task<VehicleModelDTOReadWithoutID> ReturnSingleDTORead(VehicleModel entity)
         {
             var _mapper = await _mapping.VehicleModelDataOfUpdatedEntity();

@@ -131,5 +131,26 @@ namespace ProjectService.Controllers
             }
             
         }
+
+        [HttpGet]
+        [Route("Search/{condition}")]
+
+        public async Task<IActionResult> SearchByNameOrAbrv(string condition)
+        {
+            if (condition.Length < 2)
+            {
+                return BadRequest("Minimal character input for valid search is 2");
+            }
+
+            var response = await _vehicleModelService.SearchByNameOrAbrv(condition);
+
+            if(response.Success && response.Data is not null)
+            {
+                return StatusCode(StatusCodes.Status200OK, response.Data);
+            }
+            return StatusCode(StatusCodes.Status404NotFound, response.Message);
+            
+        }
+
     } 
 }

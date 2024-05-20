@@ -23,11 +23,9 @@ namespace ProjectService.Service
 
         Task<ServiceResponse<T>> DeleteEntity(int id);
 
-        Task<PaginatedView<VehicleModelDTORead>> GetPagination(int page, int byPage);
+        Task<PaginatedView<TDO>> GetPagination(int page, int byPage);
 
-
-
-
+        Task<ServiceResponse<List<TDO>>> SearchByNameOrAbrv(string condition);
 
     }
 }

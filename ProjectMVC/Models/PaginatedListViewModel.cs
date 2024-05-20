@@ -16,6 +16,8 @@ namespace ProjectMVC.Models
         public int PageSize { get; set; }
         public int TotalPages { get; private set; }
 
+        public int OrderNumber { get; set; }
+
         public PaginatedListViewModel(List<T> items, int count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
@@ -37,10 +39,11 @@ namespace ProjectMVC.Models
 
             var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
 
-            return new PaginatedListViewModel<T>(items, count, pageIndex, pageSize); 
+            PaginatedListViewModel<T> paginatedList =  new PaginatedListViewModel<T>(items, count, pageIndex, pageSize); ;
+
+            return paginatedList; 
 
         }
-
 
     }
 }
