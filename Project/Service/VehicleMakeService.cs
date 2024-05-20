@@ -243,7 +243,7 @@ namespace ProjectService.Service
                 await _context.SaveChangesAsync();
 
                 response.Success = true;
-                response.Message = "Vehicle model added successfuly";
+                response.Message = "Vehicle maker added successfuly";
 
                 return response;
 

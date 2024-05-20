@@ -10,7 +10,6 @@ namespace ProjectMVC.Controllers
     public class VehicleMakerController : Controller
     {
 
-
         Uri baseUrl = new Uri("https://localhost:7186/VehicleMake");
         
         private readonly HttpClient _httpClient;
