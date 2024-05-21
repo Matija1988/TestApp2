@@ -24,15 +24,9 @@ namespace ProjectMVC.Test.ControllerTest
             VehicleMakeDTOInsert, 
             VehicleMakeDTOReadWithoutID> _vehicleMakerService;
 
-        private IHttpContextAccessor _httpContextAccessor;
         private VehicleMakeController _vehicleMakeController;
 
         private readonly IMapping _mapping;
-
-        Uri baseUrl = new Uri("https://localhost:7186/VehicleMake");
-
-        private readonly HttpClient _httpClient;
-
 
         public VehicleMakeControllerTest()
         {
@@ -43,12 +37,7 @@ namespace ProjectMVC.Test.ControllerTest
                 VehicleMakeDTOInsert, 
                 VehicleMakeDTOReadWithoutID>>();
 
-            _httpContextAccessor = A.Fake<HttpContextAccessor>();
-            
             _mapping = A.Fake<IMapping>();
-
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = baseUrl;
 
             //SUT
 
@@ -93,8 +82,6 @@ namespace ProjectMVC.Test.ControllerTest
         public async void VehicleMakeController_Create_ReturnsOK()
         {
 
-            var mapper = await _mapping.VehicleModelInsertFromDTO();
-
             var vehicleMake = A.Fake<ServiceResponse<VehicleMake>>();
 
             var makerDTOInsert = A.Fake<VehicleMakeDTOInsert>();
@@ -107,7 +94,32 @@ namespace ProjectMVC.Test.ControllerTest
 
             result.Should().NotBeNull();
             result.Should().BeOfType(typeof(Task<IActionResult>));
-            
+           
+        }
+
+        [Fact]
+
+        public async void VehicleMakeController_Update_ReturnsOK()
+        {
+            //Arrange
+            int id = 1;
+            var vehicleMake = A.Fake<ServiceResponse<VehicleMake>>();
+
+            var makerDTOInsert = A.Fake<VehicleMakeDTOInsert>();
+
+            A.CallTo(() => _vehicleMakerService.UpdateEntity(makerDTOInsert, id)).Returns(vehicleMake);
+
+            var controller = new VehicleMakeController(_vehicleMakerService);
+
+            //Act
+
+            var result =  controller.UpdateEntity(makerDTOInsert, id);
+
+            //Assert
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(Task<IActionResult>));
+
         }
 
 

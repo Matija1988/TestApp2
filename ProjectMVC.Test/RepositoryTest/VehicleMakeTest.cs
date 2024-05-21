@@ -53,6 +53,38 @@ namespace ProjectService.Test.RepositoryTest
 
         }
 
+        [Fact]
+
+        public async void VehicleMaker_Service_CreateEntity_ReturnsServiceResponseVehicleMake()
+        {
+
+            var makerDTOInsert = new VehicleMakeDTOInsert("Bayerische Motoren Werke GmbH", "BMW");
+            var dbContext = await GetDbContext();
+            var mapper = _mapping;
+            var vehicleMakeRepo = new VehicleMakeService(dbContext, mapper);
+
+            var result = await vehicleMakeRepo.CreateEntity(makerDTOInsert);
+
+            result.Should().NotBeNull();  
+
+
+        }
+
+        [Fact]
+
+        public async void VehicleMaker_Service_UpdateEntity_ReturnServiceResponseVehicle()
+        {
+            int id = 1;
+            var makerDTOInsert = new VehicleMakeDTOInsert("Mercedes-Benz", "MBZ");
+            var dbContext = await GetDbContext();
+            var mapper = _mapping;
+            var vehicleMakeRepo = new VehicleMakeService(dbContext, mapper);
+
+            var result = await vehicleMakeRepo.UpdateEntity(makerDTOInsert, id);
+
+            result.Should().NotBeNull();
+        }
+
         private async Task<ApplicationDbContext> GetDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
