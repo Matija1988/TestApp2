@@ -11,6 +11,11 @@ namespace ProjectService.Mappers
     public class MapperConfiguration : IMapping
     {
         
+        /// <summary>
+        /// Uzima VehicleMake i mappira ga u DTO
+        /// Takes VehicleMake and maps it into DTO
+        /// </summary>
+        /// <returns></returns>
         
         public async Task<Mapper> VehicleMakerMapReadToDTO()
         {
@@ -19,30 +24,57 @@ namespace ProjectService.Mappers
 
         }
 
+        /// <summary>
+        /// Uzima DTO i mapira ga u VehicleMake 
+        /// Takes DTO and maps it into VehicleMake
+        /// </summary>
+        /// <returns></returns>
+
         public async Task<Mapper> VehicleMakerUpdateFromDTO()
         {
             var mapper = await ReturnInsertFromDTO();
             return mapper;  
         }
 
+        /// <summary>
+        /// Uzima u VehicleMake i mapira ga u DTO READ bez ID
+        /// Takes the VehicleMake and maps into a DTO READ type without the ID
+        /// </summary>
+        /// <returns></returns>
         public async Task<Mapper> VehicleMakerDataOfUpdatedEntity()
         {
             var mapper = await ReturnUpdatedMakerData();
             return mapper;
         }
 
+        /// <summary>
+        /// Uzima Model i mapira ga u DTO
+        /// Takes the model and maps it into DTO
+        /// </summary>
+        /// <returns>mapper</returns>
+
         public async Task<Mapper> VehicleModelMapReadToDTO()
         {
             var mapper = await ReturnModelReadToDTO();
             return mapper;
         }
-
+        /// <summary>
+        /// Uzima DTO i mapira ga u model
+        /// Takes DTO and maps it into the model
+        /// </summary>
+        /// <returns>mapper</returns>
         public async Task<Mapper> VehicleModelInsertFromDTO()
         {
             var mapper = await ReturnInsertModelFromDTO();
             return mapper;
         }
 
+
+        /// <summary>
+        /// Uzima model i mapira ga u DTO READ bez ID
+        /// Takes a model and maps it into DTO READ without ID
+        /// </summary>
+        /// <returns></returns>
         public async Task<Mapper> VehicleModelDataOfUpdatedEntity()
         {
             var mapper = await ReturnUpdatedModelData();
