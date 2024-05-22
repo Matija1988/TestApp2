@@ -77,8 +77,9 @@ namespace ProjectMVC.Controllers
             }
             catch (Exception ex)
             {
-                return View();
                 throw new Exception(ex.Message);
+                return View();
+                
             }
 
         }
@@ -130,10 +131,15 @@ namespace ProjectMVC.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
+            
             HttpResponseMessage response = await _httpClient.DeleteAsync(baseUrl + "/DeleteVehicleMake/" + id);
 
-            if(!response.IsSuccessStatusCode)
+            var data = await response.Content.ReadAsStringAsync();
+            var entityFromDB = JsonConvert.DeserializeObject(data);
+
+            if (!response.IsSuccessStatusCode)
             {
+                
                 return View();
             }
 

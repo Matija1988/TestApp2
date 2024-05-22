@@ -27,7 +27,7 @@ namespace ProjectService.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(VehicleMakeDTORead))]
+
         public async Task<IActionResult> GetAll()
         {
             var response = await _vehicleMakeService.GetAll();

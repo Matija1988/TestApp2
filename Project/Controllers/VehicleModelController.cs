@@ -99,7 +99,7 @@ namespace ProjectService.Controllers
             {
                 return StatusCode(StatusCodes.Status200OK, response.Data);
             }
-            return BadRequest(response.Message);    
+            return StatusCode(StatusCodes.Status404NotFound, response.Message);    
         }
 
         [HttpGet]

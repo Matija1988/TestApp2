@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Ninject;
 using Ninject.Infrastructure.Language;
 using ProjectService.Data;
@@ -14,13 +11,13 @@ namespace ProjectService.Service
     /// Implementacija IVehicleMakeService
     /// Implementation of IVehicleMakeService
     /// </summary>
-    public class VehicleMakeService 
+    public class VehicleMakeService
         : IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert, VehicleMakeDTOReadWithoutID>
     {
         private readonly IMapping _mapping;
         private readonly ApplicationDbContext _context;
 
-        public VehicleMakeService(ApplicationDbContext context,  IMapping mapping)
+        public VehicleMakeService(ApplicationDbContext context, IMapping mapping)
         {
             _context = context;
             _mapping = mapping;
@@ -50,7 +47,7 @@ namespace ProjectService.Service
 
         public async Task<ServiceResponse<VehicleMake>> UpdateEntity(VehicleMakeDTOInsert dto, int id)
         {
-            return await ReturnUpdatedEntity(dto,id);
+            return await ReturnUpdatedEntity(dto, id);
         }
 
         /// <summary>
@@ -67,22 +64,22 @@ namespace ProjectService.Service
 
             var response = new ServiceResponse<VehicleMake>();
 
-                var EntityFromDB = await _context.VehicleMakers.FindAsync(id);
+            var EntityFromDB = await _context.VehicleMakers.FindAsync(id);
 
-                if(EntityFromDB is null)
-                {
-                    response.Success = false;
-                    response.Message = "No entity with id " + id + " found in database!!!";
-                    return response;
-                }
-
-                _context.Remove(EntityFromDB);
-                await _context.SaveChangesAsync();
-
-                response.Success = true;
-                response.Message = "Entity deleted!!!";
-
+            if (EntityFromDB is null)
+            {
+                response.Success = false;
+                response.Message = "No entity with id " + id + " found in database!!!";
                 return response;
+            }
+
+            _context.Remove(EntityFromDB);
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Message = "Entity deleted!!!";
+
+            return response;
 
         }
 
@@ -123,10 +120,10 @@ namespace ProjectService.Service
         public async Task<ServiceResponse<VehicleMakeDTOReadWithoutID>> GetSingleEntity(int id)
         {
             var response = new ServiceResponse<VehicleMakeDTOReadWithoutID>();
-           
+
             var maker = await _context.VehicleMakers.FindAsync(id);
 
-            if(id <= 0 || maker is null)
+            if (id <= 0 || maker is null)
             {
                 response.Success = false;
                 response.Message = "Vehicle maker with id " + id + " not found in database!!! " +
@@ -135,32 +132,12 @@ namespace ProjectService.Service
             }
 
             response.Success = true;
-            response.Data  = await ReturnSingleDTORead(maker);
+            response.Data = await ReturnSingleDTORead(maker);
 
             return response;
 
         }
-        //public async Task<ServiceResponse<List<VehicleMakeDTORead>>> GetPagination(int page, string condition = "")
-        //{
-        //    var response = new ServiceResponse<List<VehicleMakeDTORead>>();
-        //    var byPage = 10;
-        //    condition = condition.ToLower();
-
-        //    response.Data = await ReturnPaginatedDTOList(byPage, page, condition); 
-
-        //    if(response.Data is null)
-        //    {
-        //        response.Success = false;
-        //        response.Message = "No vehicle makers under search condition found in database";
-        //        return response;
-        //    }
-
-        //    response.Success = true;
-
-        //    return response;
-
-        //}
-
+        
 
         /// <summary>
         /// Stranicenje u backendu, radi u swaggeru
@@ -196,7 +173,7 @@ namespace ProjectService.Service
         /// <returns></returns>
         public async Task<ServiceResponse<List<VehicleMakeDTORead>>> SearchByNameOrAbrv(string condition)
         {
-            
+
             var items = await _context.VehicleMakers.Where(a => EF.Functions.Like(a.Name.ToLower(), "%" + condition + "%")
                 || EF.Functions.Like(a.Abrv.ToLower(), "%" + condition + "%"))
                 .OrderBy(a => a.Abrv)
@@ -204,16 +181,17 @@ namespace ProjectService.Service
 
             var response = new ServiceResponse<List<VehicleMakeDTORead>>();
 
-            if(items is null || items.Count < 1)
+            if (items is null || items.Count < 1)
             {
                 response.Success = false;
-                response.Message = "Entity matching name or abbreviation '" +  condition + "' not found in database!!!";
+                response.Message = "Entity matching name or abbreviation '" + condition + "' not found in database!!!";
                 return response;
             }
-            else { 
-            response.Data = await ReturnMappedList(items);
+            else
+            {
+                response.Data = await ReturnMappedList(items);
 
-            return response;
+                return response;
             }
         }
 
@@ -231,7 +209,7 @@ namespace ProjectService.Service
             return _mapper.Map<VehicleMakeDTOReadWithoutID>(entity);
         }
 
-        
+
 
         /// <summary>
         /// Uzima listu modela, vraca listu DTO
@@ -246,10 +224,10 @@ namespace ProjectService.Service
 
             foreach (var item in list)
             {
-               entityList.Add( _mapper.Map<VehicleMakeDTORead>(item));
+                entityList.Add(_mapper.Map<VehicleMakeDTORead>(item));
             }
 
-            return entityList;  
+            return entityList;
 
         }
 
@@ -264,6 +242,7 @@ namespace ProjectService.Service
         private async Task<ServiceResponse<VehicleMake>> ReturnCreatedEntity(VehicleMakeDTOInsert dto)
         {
             var response = new ServiceResponse<VehicleMake>();
+
             try
             {
                 await _context.VehicleMakers.AddAsync(await MapDTOToModel(dto, new VehicleMake()));
@@ -343,6 +322,6 @@ namespace ProjectService.Service
             }
         }
 
-       
+
     }
 }

@@ -129,25 +129,22 @@ namespace ProjectMVC.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            try
+            id = 14;
+
+            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindModel/" + id);
+
+            if (!response.IsSuccessStatusCode)
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindModel/" + id);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                var data = await response.Content.ReadAsStringAsync();
-                var entityFromDB = JsonConvert.DeserializeObject<VehicleModelDTOInsert>(data);
-
-                await PopulateDropdown();
-                return View(entityFromDB);
+               return RedirectToAction("Index");
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            var data = await response.Content.ReadAsStringAsync();
+            var entityFromDB = JsonConvert.DeserializeObject<VehicleModelDTOInsert>(data);
+
+            int makeId = entityFromDB.MakeId;
+
+            await PopulateDropdown(makeId);
+            return View(entityFromDB);
 
         }
 
@@ -190,6 +187,19 @@ namespace ProjectMVC.Controllers
             var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
 
             ViewBag.VehicleMakerList = new SelectList(VehicleMakeList, "Id", "Abrv");
+
+        }
+
+        public async Task PopulateDropdown(int makeId)
+        {
+            HttpResponseMessage getVehicleMake = await _httpClient.GetAsync(baseUrlForMaker);
+
+            string VehicleMakeData = await getVehicleMake.Content.ReadAsStringAsync();
+
+            var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
+
+            ViewBag.VehicleMakerList = new SelectList(VehicleMakeList, "Id", "Abrv");
+
 
         }
 

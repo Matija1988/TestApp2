@@ -135,29 +135,6 @@ namespace ProjectService.Service
             return response;
         }
 
-        //public async Task<ServiceResponse<List<VehicleModelDTORead>>> GetPagination(int page, string condition = "")
-        //{
-        //    var response = new ServiceResponse<List<VehicleModelDTORead>>();
-
-        //    var byPage = 10;
-
-        //    condition = condition.ToLower();
-
-        //    response.Data = await ReturnPaginatedDTOList(byPage, page, condition);  
-
-        //    if (response.Data is null)
-        //    {
-        //        response.Success = false;
-        //        response.Message = "No vehicle models under search condition found in database!!!";
-        //        return response;
-
-        //    }
-
-        //    response.Success = true;
-        //    return response;
-
-        //}
-
         /// <summary>
         /// Pretraga po nazivu ili skracenici
         /// Search by name or abbreviation
