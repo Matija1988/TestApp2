@@ -17,10 +17,28 @@ namespace ProjectService.Service
             _context = context; 
         }
 
+
+        /// <summary>
+        /// Stvara novi unos u bazi podataka putem ulaznog DTO
+        /// Creates a new DB entry via input DTO
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+
         public async Task<ServiceResponse<VehicleModel>> CreateEntity(VehicleModelDTOInsert dto)
         {
             return await ReturnCreatedEntity(dto);
         }
+
+        /// <summary>
+        /// Prima int koji predstavlja primarni kljuc entiteta u bazi podataka 
+        /// pronalazi taj entitet i mijenja njegove podatke sukladno ulaznom DTO
+        /// Takes an int that represents a primary key of an entity in DB
+        /// finds the entity and changes its data to match the input DTO
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         public async Task<ServiceResponse<VehicleModel>> UpdateEntity(VehicleModelDTOInsert dto, int id)
         {
@@ -28,6 +46,14 @@ namespace ProjectService.Service
         }
 
        
+        /// <summary>
+        /// Prima int koji predstavlja primarni kljuc entiteta u bazi podataka
+        /// pronalazi da i brise 
+        /// Takes an int that represent a primary key of an entity in DB
+        /// finds it and deletes it
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         public async Task<ServiceResponse<VehicleModel>> DeleteEntity(int id)
         {
@@ -52,6 +78,14 @@ namespace ProjectService.Service
             return response;
         }
 
+
+        /// <summary>
+        /// Mapira sve entitete koji se nalaze u bazi podataka u DTO i 
+        /// vraca ih. Ako je baza podataka prazna vraca odgovarajucu poruku.
+        /// Maps entities in DB into DTO and returns them. 
+        /// If the DB is empty returns appropriate message
+        /// </summary>
+        /// <returns></returns>
         public async Task<ServiceResponse<List<VehicleModelDTORead>>> GetAll()
         {
             var response = new ServiceResponse<List<VehicleModelDTORead>>();
@@ -62,7 +96,8 @@ namespace ProjectService.Service
 
             {
                 response.Success = false;
-                response.Message = "No data in database!!!";
+                response.Message = "No data in database!!! Check if there are any entries in DB or the validity " +
+                    " of your connection strings!!!";
                 return response;
             }
 
@@ -70,6 +105,15 @@ namespace ProjectService.Service
 
             return response;
         }
+
+        /// <summary>
+        /// Prima int koji predstavlja primarni kljuc entiteta u bazi podataka
+        /// pronalazi ga i vraca DTO
+        /// Finds and int that represents a primary key of an entity in DB
+        /// finds it and return DTO
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         public async Task<ServiceResponse<VehicleModelDTOReadWithoutID>> GetSingleEntity(int id)
         {
@@ -114,6 +158,13 @@ namespace ProjectService.Service
 
         //}
 
+        /// <summary>
+        /// Pretraga po nazivu ili skracenici
+        /// Search by name or abbreviation
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+
         public async Task <ServiceResponse<List<VehicleModelDTORead>>> SearchByNameOrAbrv(string condition)
         {
             
@@ -140,6 +191,16 @@ namespace ProjectService.Service
 
         }
 
+        /// <summary>
+        /// Stranicenje u backendu, int pageIndex predstavlja broj stranice
+        /// int pageSize broj prikazanih unosa po stranici
+        /// Pagination in backend, int pageIndex represents a page number,
+        /// int pageSize represent nubmer of entries per page
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+
         public async Task <PaginatedView<VehicleModelDTORead>> GetPagination(int pageIndex, int pageSize)
         {
  
@@ -148,6 +209,7 @@ namespace ProjectService.Service
             return response;
 
         }
+
 
         private async Task <PaginatedView<VehicleModelDTORead>> Pagination(int pageIndex, int pageSize)
         {

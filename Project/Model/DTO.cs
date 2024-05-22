@@ -42,4 +42,5 @@ namespace ProjectService.Model
 
     public record VehicleModelDTOReadWithoutID (string Name, string Abrv, int Maker);
 
+
 }

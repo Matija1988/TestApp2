@@ -28,7 +28,7 @@ namespace ProjectService.Service
 
         /// <summary>
         /// Stvara novi unos u bazu podataka putem ulaznog DTO
-        /// Creates a new db entry wila input DTO
+        /// Creates a new db entry via input DTO
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -42,7 +42,7 @@ namespace ProjectService.Service
 
         /// <summary>
         /// Uzima ulazni DTO i uneseni int koji predstavlja kljuc unosa kojeg zelimo promijeniti
-        /// Takes input DTO and int id that represent the key of the entry we wish to update
+        /// Takes input DTO and int id that represents a Primary key of the entry we wish to update
         /// </summary>
         /// <param name="dto"></param>
         /// <param name="id"></param>
@@ -52,8 +52,6 @@ namespace ProjectService.Service
         {
             return await ReturnUpdatedEntity(dto,id);
         }
-
-        
 
         /// <summary>
         /// Uzima ulazni int koji predstavlja kljuc objekta u bazi podataka 
@@ -114,6 +112,14 @@ namespace ProjectService.Service
 
         }
 
+        /// <summary>
+        /// Prima int koji predstavlja primarni kljuc entiteta i vraca entitet
+        /// Takes an int that represents the Primarty key of an entity and returns 
+        /// the entity
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
         public async Task<ServiceResponse<VehicleMakeDTOReadWithoutID>> GetSingleEntity(int id)
         {
             var response = new ServiceResponse<VehicleMakeDTOReadWithoutID>();
@@ -155,6 +161,14 @@ namespace ProjectService.Service
 
         //}
 
+
+        /// <summary>
+        /// Stranicenje u backendu, radi u swaggeru
+        /// Pagination in backend, works in Swagger
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<PaginatedView<VehicleMakeDTORead>> GetPagination(int pageIndex, int pageSize)
         {
             var _mapper = await _mapping.VehicleMakerMapReadToDTO();
@@ -174,6 +188,12 @@ namespace ProjectService.Service
             }
         }
 
+        /// <summary>
+        /// Pretraga po nazivu ili skracenici
+        /// Search by Name or Abbreviation
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
         public async Task<ServiceResponse<List<VehicleMakeDTORead>>> SearchByNameOrAbrv(string condition)
         {
             
@@ -197,6 +217,13 @@ namespace ProjectService.Service
             }
         }
 
+
+        /// <summary>
+        /// Uzima jedan entitet, mapira ga u DTO i vraca 
+        /// Takes a single entity, maps it into a DTO then returns it
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         private async Task<VehicleMakeDTOReadWithoutID> ReturnSingleDTORead(VehicleMake entity)
         {
             var _mapper = await _mapping.VehicleMakerDataOfUpdatedEntity();
@@ -228,7 +255,7 @@ namespace ProjectService.Service
 
         /// <summary>
         /// Uzima DTO i stvara novi unos u bazi podataka
-        /// Takes inpit DTO and creates new entry in DB
+        /// Takes inpt DTO and creates new entry in DB
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -251,9 +278,8 @@ namespace ProjectService.Service
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = "Task failed!!!";
-                throw new Exception(ex.Message);
-
+                response.Message = "Task failed in VehicleMakeService ReturnCreatedEntity!!!" + ex.Message;
+                return response;
             }
         }
 
@@ -311,7 +337,7 @@ namespace ProjectService.Service
             catch
             {
                 response.Success = false;
-                response.Message = "Update failed!!!";
+                response.Message = "Task failed in VehicleMakeService ReturnUpdatedEntity!!!";
 
                 return response;
             }
