@@ -129,7 +129,7 @@ namespace ProjectMVC.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            id = 14;
+           // id = 14;
 
             HttpResponseMessage response = await _httpClient.GetAsync(baseUrl + "/FindModel/" + id);
 

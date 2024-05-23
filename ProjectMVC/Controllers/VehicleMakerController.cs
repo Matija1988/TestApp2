@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using ProjectMVC.Models;
 using ProjectService.Model;
+using System.Drawing.Printing;
 using System.Text;
 
 namespace ProjectMVC.Controllers
@@ -174,6 +176,31 @@ namespace ProjectMVC.Controllers
             return entityList;
 
         }
+
+        #region API Call
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            List<VehicleMakeDTORead> entityList = new List<VehicleMakeDTORead>();
+
+            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
+
+            if (entityList is null)
+            {
+                return NotFound("No data in entity list!!!");
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = await response.Content.ReadAsStringAsync();
+                entityList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(data);
+
+            }
+            return Json(new {data=entityList });
+        }
+
+        #endregion
 
     }
 }

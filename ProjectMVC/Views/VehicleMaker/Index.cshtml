@@ -20,25 +20,27 @@
     </div>
 </div>
 
-<table class="table table-bordered table-striped">
+<table id="tblData" class="table table-bordered table-striped" style="width:100%">
     <thead>
         <tr>
-            <th>#</th>
             <th>
-                <a asp-controller="VehicleMaker" asp-action="Index" asp-route-sortOrder=@ViewData["AbrvSortParam"] class="text-black">
+                Id
+            </th>
+            <th>
+                Abrv
+                @* <a asp-controller="VehicleMaker" asp-action="Index" asp-route-sortOrder=@ViewData["AbrvSortParam"] class="text-black">
                     Abrv
-                </a>
+                </a> *@
             </th>
             <th>
                 Name
             </th>
 
-            <th></th>
         </tr>
     </thead>
     <tbody>
 
-        @foreach (var item in Model.Items)
+@*         @foreach (var item in Model.Items)
         {
             <tr>
                 <td>
@@ -58,7 +60,7 @@
                 </td>
             </tr>
         }
-
+ *@
     </tbody>
 
 </table>
@@ -100,3 +102,7 @@
     </div>
 </div>
 </div>
+
+@section Scripts{
+    <script src ="~/js/VehicleMaker.js"></script>
+}
