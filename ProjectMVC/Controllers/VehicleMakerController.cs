@@ -32,7 +32,7 @@ namespace ProjectMVC.Controllers
         {
             List<VehicleMakeDTORead> entityList = new List<VehicleMakeDTORead>();
 
-            if(pageNumber < 0)
+            if (pageNumber < 0)
             {
                 pageNumber = 1;
             }
@@ -41,27 +41,20 @@ namespace ProjectMVC.Controllers
 
             HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                string data =  await response.Content.ReadAsStringAsync();
+                string data = await response.Content.ReadAsStringAsync();
                 entityList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(data);
 
                 if (entityList is null)
                 {
-                    return NotFound("No data in entity list!!!");
+                    return NotFound("No data in vehicle maker list!!!");
                 }
 
-                if(condition is not null && condition.Length > 0)
-                {
-                  entityList = await Filter(condition, entityList);
-                  
-                }
-
-               entityList = await SortByAbrv(sortOrder, entityList);
-               
             }
 
-            return View(await PaginatedListViewModel<VehicleMakeDTORead>.Paginate(entityList, pageNumber, pageSize));
+            return View(entityList);
+
         }
 
         [HttpPost]
@@ -80,7 +73,6 @@ namespace ProjectMVC.Controllers
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-                return View();
                 
             }
 
@@ -125,12 +117,10 @@ namespace ProjectMVC.Controllers
                 return RedirectToAction("Index");
             }
 
-
             return View();
         }
 
-        [HttpGet]
-
+        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             
@@ -146,34 +136,6 @@ namespace ProjectMVC.Controllers
             }
 
             return RedirectToAction("Index");
-
-        }
-        private async Task<List<VehicleMakeDTORead>> Filter(string condition, List<VehicleMakeDTORead> list)
-        {
-            condition = condition.ToLower();
-
-            return list = list.Where(e => e.Abrv.ToLower().Contains(condition)
-            || e.Name.ToLower().Contains(condition))
-                .OrderBy(e => e.Abrv)
-                .ToList();
-        }
-
-        private async Task<List<VehicleMakeDTORead>> SortByAbrv(string sortOrder, List<VehicleMakeDTORead> entityList)
-        {
-            ViewData["AbrvSortParam"] = string.IsNullOrEmpty(sortOrder) ? "abrv_desc" : "";
-
-            switch (sortOrder)
-            {
-                case "abrv_desc":
-                    entityList = entityList.OrderByDescending(e => e.Abrv).ToList();
-                    break;
-
-                default:
-                    entityList = entityList.OrderBy(e => e.Abrv).ToList();
-                    break;
-            }
-
-            return entityList;
 
         }
 

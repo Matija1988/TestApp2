@@ -1,4 +1,4 @@
-﻿@model PaginatedListViewModel<ProjectService.Model.VehicleMakeDTORead>
+﻿@model List<ProjectService.Model.VehicleMakeDTORead> 
 
 @{
     ViewData["Title"] = "Index";
@@ -9,23 +9,11 @@
     <p class="col">
         <a asp-controller="VehicleMaker" asp-action="Create" class="btn btn-primary">Create New</a>
     </p>
-    <div class="col-md-6">
-        <form class="d-flex" asp-action="Index" asp-controller="VehicleMaker">
-            <input name="condition" class="form-control me-1" type="search" placeholder="Search" aria-label="Search" />
-            <button class="btn btn-dark" type="submit">Search</button>
-        </form>
-    </div>
-    <div class="col-md-3">
-        <a asp-action="Index" class="btn btn-outline-dark">Load full list</a>
-    </div>
 </div>
 
 <table id="tblData" class="table table-bordered table-striped" style="width:100%">
     <thead>
         <tr>
-            <th>
-                Id
-            </th>
             <th>
                 Abrv
                 @* <a asp-controller="VehicleMaker" asp-action="Index" asp-route-sortOrder=@ViewData["AbrvSortParam"] class="text-black">
@@ -35,7 +23,9 @@
             <th>
                 Name
             </th>
-
+            <th>
+                Id
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -64,44 +54,6 @@
     </tbody>
 
 </table>
-
-<div class="row">
-    <div class="col-md-6">
-    </div>
-    <div class="col-md-6">
-        <nav>
-            <ul class="pagination justify-content-end">
-                <li class="page-item" @(Model.PageIndex == 1 ? "disabled" : "")>
-                    <a class="page-link text-black" asp-route-pageNumber="1">
-                        <span>First</span>
-                    </a>
-                </li>
-                <li class="page-item" @(Model.HasPreviousPage ? "" : "disabled")>
-                    <a class="page-link text-black" asp-route-pageNumber="@(Model.PageIndex-1)">
-                        <span>Previous</span>
-                    </a>
-                </li>
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
-                    <li class="page-item" @(Model.PageIndex == i ? "active" : "")>
-                        <a class="page-link text-black" asp-route-pageNumber="@i">@i</a>
-                    </li>
-                }
-                <li class="page-item" @(Model.HasNextPage ? "" : "disabled")>
-                    <a class="page-link text-black" asp-route-pageNumber="@Model.TotalPages">
-                        <span>Next</span>
-                    </a>
-                </li>
-                <li class="page-item" @(Model.PageIndex == Model.TotalPages ? "disabled" : "")>
-                    <a class="page-link text-black" asp-route-pageNumber="@Model.TotalPages">
-                        <span>Last</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</div>
-</div>
 
 @section Scripts{
     <script src ="~/js/VehicleMaker.js"></script>
