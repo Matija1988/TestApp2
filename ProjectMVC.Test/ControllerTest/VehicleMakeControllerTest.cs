@@ -1,18 +1,10 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using ProjectMVC.Controllers;
 using ProjectService.Controllers;
 using ProjectService.Mappers;
 using ProjectService.Model;
 using ProjectService.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectMVC.Test.ControllerTest
 {

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Ninject;
 using ProjectService.Data;
 using ProjectService.Mappers;
 using ProjectService.Model;
@@ -11,6 +13,8 @@ namespace ProjectService.Service
     {
         private readonly IMapping _mapping;
         private readonly ApplicationDbContext _context;
+
+     //   [Inject]
         public VehicleModelService(ApplicationDbContext context, IMapping mapping) 
         {
             _mapping = mapping;

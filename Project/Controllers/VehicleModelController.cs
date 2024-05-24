@@ -1,5 +1,6 @@
-﻿using Azure;
+﻿
 using Microsoft.AspNetCore.Mvc;
+using Ninject;
 using ProjectService.Model;
 using ProjectService.Service;
 
@@ -7,6 +8,8 @@ namespace ProjectService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+
+    
     public class VehicleModelController : ControllerBase, IController<VehicleModelDTOInsert>
     {
         private readonly IVehicleService
@@ -15,6 +18,7 @@ namespace ProjectService.Controllers
             VehicleModelDTOInsert,
             VehicleModelDTOReadWithoutID> _vehicleModelService;
 
+       // [Inject]
         public VehicleModelController(
             IVehicleService
             <VehicleModel,

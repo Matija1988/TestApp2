@@ -15,7 +15,7 @@ function loadDataTable() {
                     data: 'id',
                     "render": function (data) {
                         return `<div class="w-75 btn-group" role="group">
-                        <a href="/VehicleMaker/Edit/${data}" class="btn btn-primary pr-3 pl-3">Edit</a>
+                        <a href="/VehicleMaker/Edit/${data}" class="btn btn-secondary pr-3 pl-3">Edit</a>
                         <a onClick=Delete("/VehicleMaker/Delete/${data}") class="btn btn-danger mx-2">Delete</a>
                         </div>`
 

@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Ninject;
+using ProjectService;
 using ProjectService.Controllers;
 using ProjectService.Data;
 using ProjectService.Mappers;
@@ -16,6 +18,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(ADBC => 
         ADBC.UseSqlServer(builder.Configuration.GetConnectionString(name: "ApplicationContext")));
+
+//var hostBuilder = Host.CreateDefaultBuilder(args)
+//    .UseServiceProviderFactory(new NinjectServiceProviderFactory())
+//    .ConfigureWebHostDefaults(webBuilder =>
+//    {
+//        webBuilder.UseStartup<Startup>();
+//    });
+
 
 builder.Services.AddScoped<IMapping, MapperConfiguration>();
 

@@ -1,18 +1,11 @@
-﻿using AutoMapper;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 using ProjectService.Controllers;
 using ProjectService.Model;
 using ProjectService.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ProjectService.Mappers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Builder;
 
 namespace ProjectService.Test.ControllerTest
 {

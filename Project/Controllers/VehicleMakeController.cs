@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Ninject;
 using ProjectService.Model;
 using ProjectService.Service;
 
@@ -8,13 +9,14 @@ namespace ProjectService.Controllers
     [Route("[controller]")]
     public class VehicleMakeController : ControllerBase, IController<VehicleMakeDTOInsert>
     {
-        private readonly IVehicleService
-            <VehicleMake, 
-            VehicleMakeDTORead, 
-            VehicleMakeDTOInsert, 
-            VehicleMakeDTOReadWithoutID> 
-            _vehicleMakeService;
-        
+        public IVehicleService
+            <VehicleMake,
+            VehicleMakeDTORead,
+            VehicleMakeDTOInsert,
+            VehicleMakeDTOReadWithoutID>
+            _vehicleMakeService { private get; set; }
+
+        [Inject]
         public VehicleMakeController(
             IVehicleService
             <VehicleMake, 
@@ -24,6 +26,7 @@ namespace ProjectService.Controllers
              vehicleMakeService)
         {
             _vehicleMakeService = vehicleMakeService;
+            
         }
 
         [HttpGet]

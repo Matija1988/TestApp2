@@ -1,16 +1,10 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using ProjectService.Data;
 using ProjectService.Mappers;
 using ProjectService.Model;
 using ProjectService.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ProjectService.Test.RepositoryTest
 {

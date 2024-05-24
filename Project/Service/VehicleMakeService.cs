@@ -14,9 +14,12 @@ namespace ProjectService.Service
     public class VehicleMakeService
         : IVehicleService<VehicleMake, VehicleMakeDTORead, VehicleMakeDTOInsert, VehicleMakeDTOReadWithoutID>
     {
-        private readonly IMapping _mapping;
-        private readonly ApplicationDbContext _context;
+        [Inject]
+        public IMapping _mapping { private get; set; }
+        [Inject]
+        public ApplicationDbContext _context { private get; set; }
 
+        [Inject]
         public VehicleMakeService(ApplicationDbContext context, IMapping mapping)
         {
             _context = context;

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectService", "ProjectSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectMVC", "..\ProjectMVC\ProjectMVC.csproj", "{1082E10B-BFD9-4ED8-A4CE-91AECF80FBEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectService.Test", "..\ProjectMVC.Test\ProjectService.Test.csproj", "{4E5D4D5D-A9CB-4F0C-BA53-87A0910CBFE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectService.Test", "..\ProjectMVC.Test\ProjectService.Test.csproj", "{4E5D4D5D-A9CB-4F0C-BA53-87A0910CBFE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
