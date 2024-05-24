@@ -1,20 +1,24 @@
 ﻿using Ninject;
 
+
 namespace ProjectService
 {
     public class NinjectServiceProviderFactory : IServiceProviderFactory<IKernel>
     {
         private readonly IKernel _kernel;
+        
 
         public NinjectServiceProviderFactory() : this(new StandardKernel())
         {
 
         }
 
+
         public NinjectServiceProviderFactory(IKernel kernel)
         {
             _kernel = kernel;
         }
+
 
 
         public IKernel CreateBuilder(IServiceCollection services)

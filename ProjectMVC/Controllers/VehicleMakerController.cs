@@ -28,32 +28,10 @@ namespace ProjectMVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Index(string condition, string sortOrder, int pageNumber)
+        public async Task<IActionResult> Index()
         {
-            List<VehicleMakeDTORead> entityList = new List<VehicleMakeDTORead>();
 
-            if (pageNumber < 0)
-            {
-                pageNumber = 1;
-            }
-
-            int pageSize = 5;
-
-            HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = await response.Content.ReadAsStringAsync();
-                entityList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(data);
-
-                if (entityList is null)
-                {
-                    return NotFound("No data in vehicle maker list!!!");
-                }
-
-            }
-
-            return View(entityList);
+            return View();
 
         }
 
@@ -148,7 +126,7 @@ namespace ProjectMVC.Controllers
 
             HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
 
-            if (entityList is null)
+            if (entityList is null) 
             {
                 return NotFound("No data in entity list!!!");
             }

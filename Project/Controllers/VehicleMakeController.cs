@@ -9,6 +9,8 @@ namespace ProjectService.Controllers
     [Route("[controller]")]
     public class VehicleMakeController : ControllerBase, IController<VehicleMakeDTOInsert>
     {
+
+        [Inject]
         public IVehicleService
             <VehicleMake,
             VehicleMakeDTORead,
@@ -16,7 +18,6 @@ namespace ProjectService.Controllers
             VehicleMakeDTOReadWithoutID>
             _vehicleMakeService { private get; set; }
 
-        [Inject]
         public VehicleMakeController(
             IVehicleService
             <VehicleMake, 

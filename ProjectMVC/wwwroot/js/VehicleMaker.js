@@ -6,7 +6,8 @@ function loadDataTable() {
     dataTable =
         $('#tblData').DataTable({
             "ajax": {
-                url: '/VehicleMaker/getAll'
+                url: '/VehicleMaker/getAll',
+                type: 'GET',
             },
             "columns": [ 
                 { data: 'abrv' },
@@ -22,8 +23,15 @@ function loadDataTable() {
                     },
                     "width": "15%"
                 },
-            ]
+
+            ], error: function (xhr, status, error) {
+                if (xhr.status === 404) {
+                    alert(xhr.status + " Data not found");
+                }
+            }
+        
         });
+
 }
 
 function Delete(url) {
@@ -38,3 +46,5 @@ function Delete(url) {
         });
     }
 }
+
+
