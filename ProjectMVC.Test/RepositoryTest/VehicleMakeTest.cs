@@ -14,7 +14,7 @@ namespace ProjectService.Test.RepositoryTest
 
         [Fact]
 
-        public async void VehicleMaker_Service_SeearchByNameOrAbrv_ReturnsTaskServiceResponseListVehicleMakeDTORead()
+        public async Task VehicleMaker_Service_SeearchByNameOrAbrv_ReturnsTaskServiceResponseListVehicleMakeDTORead()
         {
             var name = "Mitsubishi";
 
@@ -32,7 +32,7 @@ namespace ProjectService.Test.RepositoryTest
         }
 
         [Fact]
-        public async void VehicleMaker_Service_GetSingleEntity_ReturnsTaskServiceResponseVehicleMakeDTORead()
+        public async Task VehicleMaker_Service_GetSingleEntity_ReturnsTaskServiceResponseVehicleMakeDTORead()
         {
             int id = 1;
 
@@ -49,7 +49,7 @@ namespace ProjectService.Test.RepositoryTest
 
         [Fact]
 
-        public async void VehicleMaker_Service_CreateEntity_ReturnsServiceResponseVehicleMake()
+        public async Task VehicleMaker_Service_CreateEntity_ReturnsServiceResponseVehicleMake()
         {
 
             var makerDTOInsert = new VehicleMakeDTOInsert("Bayerische Motoren Werke GmbH", "BMW");
@@ -59,14 +59,13 @@ namespace ProjectService.Test.RepositoryTest
 
             var result = await vehicleMakeRepo.CreateEntity(makerDTOInsert);
 
-            result.Should().NotBeNull();  
-
-
+            result.Should().NotBeNull();
+            result.Should().NotBe(typeof(Exception));
         }
 
         [Fact]
 
-        public async void VehicleMaker_Service_UpdateEntity_ReturnServiceResponseVehicle()
+        public async Task VehicleMaker_Service_UpdateEntity_ReturnServiceResponseVehicle()
         {
             int id = 1;
             var makerDTOInsert = new VehicleMakeDTOInsert("Mercedes-Benz", "MBZ");
@@ -77,6 +76,7 @@ namespace ProjectService.Test.RepositoryTest
             var result = await vehicleMakeRepo.UpdateEntity(makerDTOInsert, id);
 
             result.Should().NotBeNull();
+            result.Should().NotBe(typeof(Exception));
         }
 
         private async Task<ApplicationDbContext> GetDbContext()

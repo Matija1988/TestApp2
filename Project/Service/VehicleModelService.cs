@@ -204,10 +204,10 @@ namespace ProjectService.Service
 
                 return await PaginatedView<VehicleModelDTORead>.PaginateAsync(items, pageIndex, pageSize);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw new Exception("Unexpected error at VehicleModelService Pagination" + ex.Message);
             }
         }
 
@@ -274,7 +274,7 @@ namespace ProjectService.Service
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = "Task failed!!!";
+                response.Message = "Task failed in VehicleModelService ReturnCreatedEntity!!!";
                 throw new Exception(ex.Message);
             }
         }

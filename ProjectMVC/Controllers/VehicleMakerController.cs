@@ -11,6 +11,10 @@ namespace ProjectMVC.Controllers
    
     public class VehicleMakerController : Controller
     {
+        /// <summary>
+        /// Koristiti svoju localhost adresu + /VehicleMake
+        /// Use your localhost adress +  /VehicleMake
+        /// </summary>
 
         Uri baseUrl = new Uri("https://localhost:7186/VehicleMake");
         

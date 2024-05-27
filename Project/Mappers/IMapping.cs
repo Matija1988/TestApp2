@@ -8,7 +8,7 @@ namespace ProjectService.Mappers
     /// </summary>
     public interface IMapping
     {
-       Task<Mapper> VehicleMakerMapReadToDTO();
+        Task<Mapper> VehicleMakerMapReadToDTO();
 
         Task<Mapper> VehicleMakerUpdateFromDTO();
 

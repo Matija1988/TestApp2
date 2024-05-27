@@ -14,6 +14,11 @@ namespace ProjectMVC.Controllers
 {
     public class VehicleModelsController : Controller
     {
+        /// <summary>
+        /// Koristiti svoju localhost adresu + /VehicleModel i /VehicleMake
+        /// Use your localhost adress + /VehicleModel and /VehicleMake
+        /// </summary>
+
         Uri baseUrl = new Uri("https://localhost:7186/VehicleModel");
 
         Uri baseUrlForMaker = new Uri("https://localhost:7186/VehicleMake");
@@ -57,35 +62,6 @@ namespace ProjectMVC.Controllers
             return View(await PaginatedListViewModel<VehicleModelDTORead>.Paginate(entityList, pageNumber, pageSize));
         }
 
-//        [HttpPost]
-
-        //public async Task<IActionResult> PaginateRequest(int pageNumber, int pageSize)
-        //{
-        //    if (pageNumber < 1)
-        //    {
-        //        pageNumber = 1;
-        //    }
-
-        //    if(pageSize < 1)
-        //    {
-        //        pageSize = 1; 
-        //    }
-        //    List<VehicleModelDTORead> entityList = new List<VehicleModelDTORead>();
-
-        //    HttpResponseMessage sendPageNumber 
-        //        = await _httpClient.GetAsync(baseUrl + "/Paginate/" + pageNumber + "/" + pageSize);
-
-        //    if (sendPageNumber.IsSuccessStatusCode)
-        //    {
-        //        string data = await sendPageNumber.Content.ReadAsStringAsync();
-        //        entityList = JsonConvert.DeserializeObject<List<VehicleModelDTORead>>(data) ??
-        //            throw new Exception("No data found in database!!!");
-        //    }
-
-
-
-        //    return null;
-        //}
 
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -143,7 +119,7 @@ namespace ProjectMVC.Controllers
 
             int makeId = entityFromDB.MakeId;
 
-            await PopulateDropdown(makeId);
+            await PopulateDropdown();
             return View(entityFromDB);
 
         }
@@ -187,19 +163,6 @@ namespace ProjectMVC.Controllers
             var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
 
             ViewBag.VehicleMakerList = new SelectList(VehicleMakeList, "Id", "Abrv");
-
-        }
-
-        public async Task PopulateDropdown(int makeId)
-        {
-            HttpResponseMessage getVehicleMake = await _httpClient.GetAsync(baseUrlForMaker);
-
-            string VehicleMakeData = await getVehicleMake.Content.ReadAsStringAsync();
-
-            var VehicleMakeList = JsonConvert.DeserializeObject<List<VehicleMakeDTORead>>(VehicleMakeData);
-
-            ViewBag.VehicleMakerList = new SelectList(VehicleMakeList, "Id", "Abrv");
-
 
         }
 

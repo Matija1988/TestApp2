@@ -118,18 +118,17 @@ namespace ProjectService.Mappers
 
         private async Task<Mapper> ReturnModelReadToDTO()
         {
-            var mappper = new Mapper(
+
+            return new Mapper(
                 new AutoMapper.MapperConfiguration(c =>
                 c.CreateMap<VehicleModel, VehicleModelDTORead>()
-                .ConstructUsing(e => 
+                .ConstructUsing(e =>
                 new VehicleModelDTORead(
                     e.Id,
                     e.Name,
                     e.Abrv,
                     e.Make.Abrv
                     ))));
-
-            return mappper;
         }
         /// <summary>
         /// Enkapsulacija mapper konfiguracije koja VehicleMake
@@ -140,12 +139,10 @@ namespace ProjectService.Mappers
         /// <returns></returns>
 
         private async Task<Mapper> ReturnReadToDTO()
-        {   
-           var mapper = new Mapper(
+        {    
+            return new Mapper(
                 new AutoMapper.MapperConfiguration(c =>
                 c.CreateMap<VehicleMake, VehicleMakeDTORead>()));
-            
-            return mapper;
         }
         /// <summary>
         /// Enkapsulacija mapper konfigiracije kojom se ulazni

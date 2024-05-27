@@ -12,7 +12,7 @@ namespace ProjectService.Test.RepositoryTest
         private readonly IMapping _mapping;
 
         [Fact]
-        public async void VehicleModel_Service_SearchByNameOrAbrv_ReturnsTaskServiceResponseListVehicleModelDTORead()
+        public async Task VehicleModel_Service_SearchByNameOrAbrv_ReturnsTaskServiceResponseListVehicleModelDTORead()
         {
             string abrv = "EVO 8";
 
@@ -31,7 +31,7 @@ namespace ProjectService.Test.RepositoryTest
 
         [Fact]
 
-        public async void VehicleModel_Service_GetSingleEntity_ReturnsTaskServiceResponseVehicleModelDTORead()
+        public async Task VehicleModel_Service_GetSingleEntity_ReturnsTaskServiceResponseVehicleModelDTORead()
         {
             int id = 2;
 
@@ -48,7 +48,7 @@ namespace ProjectService.Test.RepositoryTest
         }
 
         [Fact]
-        public async void VehicleModel_Service_CreateEntity_ReturnsServiceResponseVehicleModel()
+        public async Task VehicleModel_Service_CreateEntity_ReturnsServiceResponseVehicleModel()
         {
 
             string name = "EVO Revolution 8";
@@ -67,7 +67,7 @@ namespace ProjectService.Test.RepositoryTest
 
         [Fact]
 
-        public async void VehicleModel_Service_UpdateEntity_ReturnsServiceResponseVehicleModel()
+        public async Task VehicleModel_Service_UpdateEntity_ReturnsServiceResponseVehicleModel()
         {
             int id = 1;
             string name = "EVO Revolution 8";

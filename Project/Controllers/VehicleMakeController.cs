@@ -99,7 +99,7 @@ namespace ProjectService.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest("ID cannot be equal to or lower then 0");
+                return BadRequest("ID cannot be equal to or lower than 0");
             }
            var response =  await _vehicleMakeService.DeleteEntity(id);
 

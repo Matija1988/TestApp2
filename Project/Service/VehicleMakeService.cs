@@ -19,7 +19,6 @@ namespace ProjectService.Service
         [Inject]
         public ApplicationDbContext _context { private get; set; }
 
-        [Inject]
         public VehicleMakeService(ApplicationDbContext context, IMapping mapping)
         {
             _context = context;
@@ -316,10 +315,10 @@ namespace ProjectService.Service
                 return response;
 
             }
-            catch
+            catch (Exception ex) 
             {
                 response.Success = false;
-                response.Message = "Task failed in VehicleMakeService ReturnUpdatedEntity!!!";
+                response.Message = "Task failed in VehicleMakeService ReturnUpdatedEntity!!!" + ex.Message;
 
                 return response;
             }
